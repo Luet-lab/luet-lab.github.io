@@ -1,11 +1,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Luet – Overview</title>
-    <link>https://luet-lab.github.io/docs/docs/overview/</link>
+    <link>https://luet-lab.github.io/docs/docs/concepts/overview/</link>
     <description>Recent content in Overview on Luet</description>
     <generator>Hugo -- gohugo.io</generator>
     
-	  <atom:link href="https://luet-lab.github.io/docs/docs/overview/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://luet-lab.github.io/docs/docs/concepts/overview/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -15,10 +15,10 @@
     
     <item>
       <title>Docs: Building packages</title>
-      <link>https://luet-lab.github.io/docs/docs/overview/build_packages/</link>
+      <link>https://luet-lab.github.io/docs/docs/concepts/overview/build_packages/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://luet-lab.github.io/docs/docs/overview/build_packages/</guid>
+      <guid>https://luet-lab.github.io/docs/docs/concepts/overview/build_packages/</guid>
       <description>
         
         
@@ -76,10 +76,10 @@ $&amp;gt; cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt;EOF &amp
     
     <item>
       <title>Docs: Creating Luet repositories</title>
-      <link>https://luet-lab.github.io/docs/docs/overview/repositories/</link>
+      <link>https://luet-lab.github.io/docs/docs/concepts/overview/repositories/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://luet-lab.github.io/docs/docs/overview/repositories/</guid>
+      <guid>https://luet-lab.github.io/docs/docs/concepts/overview/repositories/</guid>
       <description>
         
         
@@ -171,10 +171,10 @@ foo-bar-0.1-builder.image.tar  foo-bar-0.1.image.tar  foo-bar-0.1.metadata.yaml 
     
     <item>
       <title>Docs: Run Luet boxes</title>
-      <link>https://luet-lab.github.io/docs/docs/overview/run_boxes/</link>
+      <link>https://luet-lab.github.io/docs/docs/concepts/overview/run_boxes/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://luet-lab.github.io/docs/docs/overview/run_boxes/</guid>
+      <guid>https://luet-lab.github.io/docs/docs/concepts/overview/run_boxes/</guid>
       <description>
         
         
@@ -184,10 +184,10 @@ foo-bar-0.1-builder.image.tar  foo-bar-0.1.image.tar  foo-bar-0.1.metadata.yaml 
     
     <item>
       <title>Docs: Managing packages</title>
-      <link>https://luet-lab.github.io/docs/docs/overview/managing_packages/</link>
+      <link>https://luet-lab.github.io/docs/docs/concepts/overview/managing_packages/</link>
       <pubDate>Sat, 14 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://luet-lab.github.io/docs/docs/overview/managing_packages/</guid>
+      <guid>https://luet-lab.github.io/docs/docs/concepts/overview/managing_packages/</guid>
       <description>
         
         
