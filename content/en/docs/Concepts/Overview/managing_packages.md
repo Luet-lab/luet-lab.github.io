@@ -1,6 +1,7 @@
 ---
 title: "Managing packages"
 linkTitle: "Managing packages"
+weight: 3
 date: 2019-12-14
 description: >
   How to install packages, manage repositories, ...

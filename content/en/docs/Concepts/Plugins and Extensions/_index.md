@@ -2,7 +2,7 @@
 ---
 title: "Plugins and Extensions"
 linkTitle: "Plugins and Extensions"
-weight: 6
+weight: 3
 description: >
   Extend luet with plugins and extensions
 ---

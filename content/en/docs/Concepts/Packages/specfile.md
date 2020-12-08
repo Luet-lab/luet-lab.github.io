@@ -1,7 +1,7 @@
 ---
 title: "Specfile"
 linkTitle: "Specfile"
-weight: 1
+weight: 2
 description: >
   Luet specfile syntax
 ---

@@ -1,7 +1,7 @@
 ---
 title: "Overview"
 linkTitle: "Overview"
-weight: 3
+weight: 1
 description: >
   See Luet in action.
 ---

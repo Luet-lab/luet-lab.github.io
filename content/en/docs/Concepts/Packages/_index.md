@@ -1,9 +1,9 @@
 ---
-title: "Package"
-linkTitle: "Package definition"
-weight: 4
+title: "Packages"
+linkTitle: "Packages"
+weight: 2
 description: >
-  How to define packages and relations between packages
+  Package definition syntax
 ---
 
 A Package in Luet is denoted by a triple (`name`, `category` and `version`), here called *package form* in a `definition.yaml` file in YAML: 
@@ -30,7 +30,7 @@ requires:
 
 When a package is required to be built, Luet resolves the dependency trees and orders the spec files to satisfy the given contraints.
 
-Each package build context is where the spec files are found (`definition.yaml` and `build.yaml`). This means that in the container, which is running the build process, the resources inside the package folder are accessible, as normally in Docker. *Note: you can use this mechanism to provide helper scripts or even static binaries to seed your images from scratch*
+Each package build context is where the spec files are found (`definition.yaml` and `build.yaml`). This means that in the container, which is running the build process, the resources inside the package folder are accessible, as normally in Docker.
 
 ```
 ❯ tree distro/raspbian/buster
