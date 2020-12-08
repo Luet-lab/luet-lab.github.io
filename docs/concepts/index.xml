@@ -43,41 +43,7 @@ Luet allows also to create packages entirely from Docker images content. In this
     </item>
     
     <item>
-      <title>Docs: CSP, SAT &amp;&amp; RL</title>
-      <link>https://luet-lab.github.io/docs/docs/concepts/constraints/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://luet-lab.github.io/docs/docs/concepts/constraints/</guid>
-      <description>
-        
-        
-        &lt;p&gt;Under the hood, Luet uses boolean satisfiability problem (&lt;a href=&#34;https://en.wikipedia.org/wiki/Boolean_satisfiability_problem&#34;&gt;SAT&lt;/a&gt;)  &lt;a href=&#34;https://en.wikipedia.org/wiki/Reinforcement_learning&#34;&gt;reinforcement learning&lt;/a&gt; techniques to solve package constraints.&lt;/p&gt;
-&lt;p&gt;Luet allows you to specify 3 types of set of contraints on a &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/&#34;&gt;package&lt;/a&gt; definition:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Requires&lt;/li&gt;
-&lt;li&gt;Conflicts&lt;/li&gt;
-&lt;li&gt;Provides&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The package definition in your tree definition, along with its Requires and Conflicts, are turned into Boolean formulas that are consumed by the solver to compute a solution. The solution represent the state of your system after a particular query is asked to the solver (Install, Uninstall, Upgrade).&lt;/p&gt;
-&lt;h2 id=&#34;requires-and-conflicts&#34;&gt;Requires and Conflicts&lt;/h2&gt;
-&lt;p&gt;A list of requires and conflicts, composed of one or more &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/&#34;&gt;packages&lt;/a&gt;, becomes a SAT formula. The formula is then given to the SAT solver to compute a finite state set of packages which must be installed in the system in order to met the requirements.&lt;/p&gt;
-&lt;p&gt;As Luet allows to express constraints with selectors ( e.g. &lt;code&gt;A depends on &amp;gt;=B-1.0&lt;/code&gt;) it generates additional constraints to guarantee that at least one package and at most one is picked as dependency (&lt;em&gt;ALO&lt;/em&gt; and &lt;em&gt;AMO&lt;/em&gt;).&lt;/p&gt;
-&lt;p&gt;At the moment of writing Luet is not encoding any order, but relies on the SAT solver and tries to enforce the order by forcing the engine to look at the &amp;ldquo;best&amp;rdquo; pick among a set of package. This is a known issue that we will address in the near future.&lt;/p&gt;
-&lt;h2 id=&#34;provides&#34;&gt;Provides&lt;/h2&gt;
-&lt;p&gt;Provides constraints are not encoded in a SAT formula. Instead, they are &lt;code&gt;expanded&lt;/code&gt; into an in-place substitution of the packages that they have to be replaced with.
-They share the same SAT logic of expansion, allowing to swap entire version ranges (e.g. &lt;code&gt;&amp;gt;=1.0&lt;/code&gt;), allowing to handle package rename, removals, and virtuals.&lt;/p&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;OPIUM (Luet is inspired by it): &lt;a href=&#34;https://ranjitjhala.github.io/static/opium.pdf&#34;&gt;https://ranjitjhala.github.io/static/opium.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;FROM TRACTABLE CSP TO TRACTABLE SAT: &lt;a href=&#34;https://www.cs.ox.ac.uk/files/4014/maxclosed_orderencoding_v16_TR.pdf&#34;&gt;https://www.cs.ox.ac.uk/files/4014/maxclosed_orderencoding_v16_TR.pdf&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Solver concepts applied to packages (&lt;code&gt;zypper&lt;/code&gt;): &lt;a href=&#34;https://en.opensuse.org/openSUSE:Libzypp_satsolver_basics&#34;&gt;https://en.opensuse.org/openSUSE:Libzypp_satsolver_basics&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-      </description>
-    </item>
-    
-    <item>
-      <title>Docs: Package</title>
+      <title>Docs: Packages</title>
       <link>https://luet-lab.github.io/docs/docs/concepts/packages/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -99,7 +65,7 @@ They share the same SAT logic of expansion, allowing to swap entire version rang
 &lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;  &lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;category&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;building-process&#34;&gt;Building process&lt;/h2&gt;
 &lt;p&gt;When a package is required to be built, Luet resolves the dependency trees and orders the spec files to satisfy the given contraints.&lt;/p&gt;
-&lt;p&gt;Each package build context is where the spec files are found (&lt;code&gt;definition.yaml&lt;/code&gt; and &lt;code&gt;build.yaml&lt;/code&gt;). This means that in the container, which is running the build process, the resources inside the package folder are accessible, as normally in Docker. &lt;em&gt;Note: you can use this mechanism to provide helper scripts or even static binaries to seed your images from scratch&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Each package build context is where the spec files are found (&lt;code&gt;definition.yaml&lt;/code&gt; and &lt;code&gt;build.yaml&lt;/code&gt;). This means that in the container, which is running the build process, the resources inside the package folder are accessible, as normally in Docker.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;❯ tree distro/raspbian/buster
 distro/raspbian/buster
 ├── build.sh
@@ -249,6 +215,79 @@ distro/raspbian/buster
 &lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;category&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;utils&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;version&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;1.0&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;As a reminder, the &lt;code&gt;includes&lt;/code&gt; keywords accepts regular expressions in the Golang format. Any criteria expressed by means of Golang regular expressions, and matching the file name (absolute path), will be part of the final package.&lt;/p&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Docs: Plugins and Extensions</title>
+      <link>https://luet-lab.github.io/docs/docs/concepts/plugins-and-extensions/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://luet-lab.github.io/docs/docs/concepts/plugins-and-extensions/</guid>
+      <description>
+        
+        
+        &lt;p&gt;Luet can be extended in 2 ways by extensions and plugins.&lt;/p&gt;
+&lt;h1 id=&#34;before-you-begin&#34;&gt;Before you begin&lt;/h1&gt;
+&lt;p&gt;You need to have a working &lt;code&gt;luet&lt;/code&gt; binary installed.&lt;/p&gt;
+&lt;h2 id=&#34;extensions&#34;&gt;Extensions&lt;/h2&gt;
+&lt;p&gt;Extensions expand Luet featureset horizontally, so for example, “luet geniso” will allow you to build an iso using luet, without this needing to be part of the luet core.&lt;/p&gt;
+&lt;p&gt;An Extension is nothing more than a standalone executable file, whose name begins with &lt;code&gt;luet-&lt;/code&gt;. To install an extension, simply move its executable file to anywhere on your system &lt;code&gt;PATH&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;All the plugins will be accessible to luet as &lt;code&gt;luet pluginname&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;writing-an-extension&#34;&gt;Writing an Extension&lt;/h3&gt;
+&lt;p&gt;You can write an extension in any programming language or script that allows you to write command-line commands.&lt;/p&gt;
+&lt;p&gt;Executables receive the inherited environment from luet. An extension determines which command path it wishes to implement based on its name. For example, a plugin wanting to provide a new command luet foo, would simply be named luet-foo, and live somewhere in your PATH.&lt;/p&gt;
+&lt;h4 id=&#34;example-extension&#34;&gt;Example Extension&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;$1&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;help&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;]]&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;then&lt;/span&gt;
+    &lt;span style=&#34;color:#204a87&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;Extension help&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#204a87&#34;&gt;exit&lt;/span&gt; &lt;span style=&#34;color:#0000cf;font-weight:bold&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;fi&lt;/span&gt;
+
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;$1&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;run&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;]]&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;then&lt;/span&gt;
+    &lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;# do something interesting&lt;/span&gt;
+&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;fi&lt;/span&gt;
+
+&lt;span style=&#34;color:#204a87&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;I am an Extension named luet-foo&amp;#34;&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;using-an-extension&#34;&gt;Using an Extension&lt;/h3&gt;
+&lt;p&gt;To use the above extension, simply make it executable:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ sudo chmod +x ./luet-foo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and place it anywhere in your PATH:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ sudo mv ./luet-foo /usr/local/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You may now invoke your extension as a luet command:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ luet foo
+I am an Extension named luet-foo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;All args and flags are passed as-is to the executable:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ luet foo &lt;span style=&#34;color:#204a87&#34;&gt;help&lt;/span&gt;
+
+Extension &lt;span style=&#34;color:#204a87&#34;&gt;help&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;plugins&#34;&gt;Plugins&lt;/h2&gt;
+&lt;p&gt;Plugins instead are expanding Luet vertically by hooking into internal events. Plugins and Extensions can be written in any language, bash included! Luet uses &lt;a href=&#34;https://github.com/mudler/go-pluggable&#34;&gt;go-pluggable&lt;/a&gt; so it can dispatch events to external binaries.&lt;/p&gt;
+&lt;p&gt;Similarly to &lt;strong&gt;Extensions&lt;/strong&gt;, a &lt;strong&gt;Plugin&lt;/strong&gt; is nothing more than a standalone executable file, but without any special prefix. To install a plugin, simply move its executable file to anywhere on your system &lt;code&gt;PATH&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Differently from &lt;strong&gt;Extensions&lt;/strong&gt;, they are not available from the &lt;strong&gt;CLI&lt;/strong&gt; and cannot be invoked directly by the user, instead they are called by Luet during its lifecycle.&lt;/p&gt;
+&lt;h3 id=&#34;writing-a-plugin&#34;&gt;Writing a Plugin&lt;/h3&gt;
+&lt;p&gt;You can write a plugin in any programming language or script.&lt;/p&gt;
+&lt;p&gt;The first argument that is passed to a plugin will always be the event that was emitted by Luet in its lifecycle. You can see all the &lt;a href=&#34;https://github.com/mudler/luet/blob/master/pkg/bus/events.go&#34;&gt;events available here&lt;/a&gt;. The second argument, is a &lt;code&gt;JSON&lt;/code&gt; encoded payload of the object that Luet is emitting with the event. The object(s) may vary depending on the emitted event.&lt;/p&gt;
+&lt;h4 id=&#34;example-plugin&#34;&gt;Example Plugin&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;span style=&#34;color:#8f5902;font-style:italic&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;$1&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; /tmp/event.txt
+&lt;span style=&#34;color:#204a87&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;$2&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; /tmp/payload.txt
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;using-a-plugin&#34;&gt;Using a plugin&lt;/h3&gt;
+&lt;p&gt;To use the above plugin, simply make it executable:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ sudo chmod +x ./test-foo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;and place it anywhere in your PATH:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ sudo mv ./test-foo /usr/local/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now, when running luet, add &lt;code&gt;--plugin test-foo&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;
+$ luet --plugin test-foo install -y foopackage
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And check &lt;code&gt;/tmp/event.txt&lt;/code&gt; to see the event fired and &lt;code&gt;/tmp/payload.txt&lt;/code&gt; to check the payloads that were emitted by Luet.&lt;/p&gt;
 
       </description>
     </item>

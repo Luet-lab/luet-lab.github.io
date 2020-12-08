@@ -170,19 +170,6 @@ foo-bar-0.1-builder.image.tar  foo-bar-0.1.image.tar  foo-bar-0.1.metadata.yaml 
     </item>
     
     <item>
-      <title>Docs: Run Luet boxes</title>
-      <link>https://luet-lab.github.io/docs/docs/concepts/overview/run_boxes/</link>
-      <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://luet-lab.github.io/docs/docs/concepts/overview/run_boxes/</guid>
-      <description>
-        
-        
-        
-      </description>
-    </item>
-    
-    <item>
       <title>Docs: Managing packages</title>
       <link>https://luet-lab.github.io/docs/docs/concepts/overview/managing_packages/</link>
       <pubDate>Sat, 14 Dec 2019 00:00:00 +0000</pubDate>
@@ -235,6 +222,40 @@ $ luet search --yaml &amp;lt;regex&amp;gt;
 $ luet search --table &amp;lt;regex&amp;gt;
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+      </description>
+    </item>
+    
+    <item>
+      <title>Docs: CSP, SAT &amp;&amp; RL</title>
+      <link>https://luet-lab.github.io/docs/docs/concepts/overview/constraints/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://luet-lab.github.io/docs/docs/concepts/overview/constraints/</guid>
+      <description>
+        
+        
+        &lt;p&gt;Under the hood, Luet uses boolean satisfiability problem (&lt;a href=&#34;https://en.wikipedia.org/wiki/Boolean_satisfiability_problem&#34;&gt;SAT&lt;/a&gt;)  &lt;a href=&#34;https://en.wikipedia.org/wiki/Reinforcement_learning&#34;&gt;reinforcement learning&lt;/a&gt; techniques to solve package constraints.&lt;/p&gt;
+&lt;p&gt;Luet allows you to specify 3 types of set of contraints on a &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/&#34;&gt;package&lt;/a&gt; definition:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Requires&lt;/li&gt;
+&lt;li&gt;Conflicts&lt;/li&gt;
+&lt;li&gt;Provides&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The package definition in your tree definition, along with its Requires and Conflicts, are turned into Boolean formulas that are consumed by the solver to compute a solution. The solution represent the state of your system after a particular query is asked to the solver (Install, Uninstall, Upgrade).&lt;/p&gt;
+&lt;h2 id=&#34;requires-and-conflicts&#34;&gt;Requires and Conflicts&lt;/h2&gt;
+&lt;p&gt;A list of requires and conflicts, composed of one or more &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/&#34;&gt;packages&lt;/a&gt;, becomes a SAT formula. The formula is then given to the SAT solver to compute a finite state set of packages which must be installed in the system in order to met the requirements.&lt;/p&gt;
+&lt;p&gt;As Luet allows to express constraints with selectors ( e.g. &lt;code&gt;A depends on &amp;gt;=B-1.0&lt;/code&gt;) it generates additional constraints to guarantee that at least one package and at most one is picked as dependency (&lt;em&gt;ALO&lt;/em&gt; and &lt;em&gt;AMO&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;At the moment of writing Luet is not encoding any order, but relies on the SAT solver and tries to enforce the order by forcing the engine to look at the &amp;ldquo;best&amp;rdquo; pick among a set of package. This is a known issue that we will address in the near future.&lt;/p&gt;
+&lt;h2 id=&#34;provides&#34;&gt;Provides&lt;/h2&gt;
+&lt;p&gt;Provides constraints are not encoded in a SAT formula. Instead, they are &lt;code&gt;expanded&lt;/code&gt; into an in-place substitution of the packages that they have to be replaced with.
+They share the same SAT logic of expansion, allowing to swap entire version ranges (e.g. &lt;code&gt;&amp;gt;=1.0&lt;/code&gt;), allowing to handle package rename, removals, and virtuals.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;OPIUM (Luet is inspired by it): &lt;a href=&#34;https://ranjitjhala.github.io/static/opium.pdf&#34;&gt;https://ranjitjhala.github.io/static/opium.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;FROM TRACTABLE CSP TO TRACTABLE SAT: &lt;a href=&#34;https://www.cs.ox.ac.uk/files/4014/maxclosed_orderencoding_v16_TR.pdf&#34;&gt;https://www.cs.ox.ac.uk/files/4014/maxclosed_orderencoding_v16_TR.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Solver concepts applied to packages (&lt;code&gt;zypper&lt;/code&gt;): &lt;a href=&#34;https://en.opensuse.org/openSUSE:Libzypp_satsolver_basics&#34;&gt;https://en.opensuse.org/openSUSE:Libzypp_satsolver_basics&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
       </description>
     </item>
     

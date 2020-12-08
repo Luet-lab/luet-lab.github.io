@@ -18,8 +18,8 @@
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/packages/specfile/</loc>
-    <lastmod>2020-12-08T17:12:25+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/concepts/overview/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
@@ -33,18 +33,18 @@
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/packages/</loc>
-    <lastmod>2020-12-08T17:12:25+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/concepts/packages/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/packages/templates/</loc>
-    <lastmod>2020-12-08T17:12:25+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/concepts/packages/specfile/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/concepts/overview/run_boxes/</loc>
-    <lastmod>2020-12-08T17:12:25+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/concepts/overview/managing_packages/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
@@ -53,43 +53,38 @@
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/packages/collections/</loc>
-    <lastmod>2020-12-08T17:12:25+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/concepts/plugins-and-extensions/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/concepts/overview/</loc>
-    <lastmod>2020-12-08T17:12:25+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/concepts/packages/templates/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/examples/arm/</loc>
-    <lastmod>2020-03-18T22:31:24+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/resources/arm/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/examples/building/</loc>
-    <lastmod>2020-03-18T22:31:24+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/resources/building/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/concepts/constraints/</loc>
-    <lastmod>2020-03-19T18:42:39+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/concepts/packages/collections/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/concepts/packages/</loc>
-    <lastmod>2020-12-08T17:12:25+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/concepts/overview/constraints/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/examples/scratch/</loc>
-    <lastmod>2020-11-29T22:28:52+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://luet-lab.github.io/docs/docs/plugins-and-extensions/</loc>
-    <lastmod>2020-11-29T22:46:15+01:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/resources/scratch/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
@@ -103,8 +98,8 @@
   </url>
   
   <url>
-    <loc>https://luet-lab.github.io/docs/docs/examples/</loc>
-    <lastmod>2020-08-08T12:16:57+02:00</lastmod>
+    <loc>https://luet-lab.github.io/docs/docs/resources/</loc>
+    <lastmod>2020-12-08T17:31:43+01:00</lastmod>
   </url>
   
   <url>
@@ -130,11 +125,6 @@
   <url>
     <loc>https://luet-lab.github.io/docs/blog/2019/12/23/website-is-up/</loc>
     <lastmod>2020-02-01T16:14:55+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://luet-lab.github.io/docs/docs/concepts/overview/managing_packages/</loc>
-    <lastmod>2020-12-08T17:12:25+01:00</lastmod>
   </url>
   
   <url>

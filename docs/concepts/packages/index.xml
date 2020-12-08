@@ -1,11 +1,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Luet – Packages</title>
-    <link>https://luet-lab.github.io/docs/docs/packages/</link>
+    <link>https://luet-lab.github.io/docs/docs/concepts/packages/</link>
     <description>Recent content in Packages on Luet</description>
     <generator>Hugo -- gohugo.io</generator>
     
-	  <atom:link href="https://luet-lab.github.io/docs/docs/packages/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://luet-lab.github.io/docs/docs/concepts/packages/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -15,10 +15,10 @@
     
     <item>
       <title>Docs: Specfile</title>
-      <link>https://luet-lab.github.io/docs/docs/packages/specfile/</link>
+      <link>https://luet-lab.github.io/docs/docs/concepts/packages/specfile/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://luet-lab.github.io/docs/docs/packages/specfile/</guid>
+      <guid>https://luet-lab.github.io/docs/docs/concepts/packages/specfile/</guid>
       <description>
         
         
@@ -146,28 +146,81 @@ distro
     
     <item>
       <title>Docs: Templated packages</title>
-      <link>https://luet-lab.github.io/docs/docs/packages/templates/</link>
+      <link>https://luet-lab.github.io/docs/docs/concepts/packages/templates/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://luet-lab.github.io/docs/docs/packages/templates/</guid>
+      <guid>https://luet-lab.github.io/docs/docs/concepts/packages/templates/</guid>
       <description>
         
         
-        &lt;p&gt;Luet supports the &lt;code&gt;helm&lt;/code&gt; rendering engine template. It&amp;rsquo;s being used to interpolate &lt;code&gt;build.yaml&lt;/code&gt; and &lt;code&gt;finalize.yaml&lt;/code&gt; files before their execution.&lt;/p&gt;
+        &lt;p&gt;Luet supports the &lt;a href=&#34;https://helm.sh/docs/chart_template_guide/&#34;&gt;&lt;code&gt;helm&lt;/code&gt; rendering engine template&lt;/a&gt;. It&amp;rsquo;s being used to interpolate &lt;code&gt;build.yaml&lt;/code&gt; and &lt;code&gt;finalize.yaml&lt;/code&gt; files before their execution.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;build.yaml&lt;/code&gt; and &lt;code&gt;finalize.yaml&lt;/code&gt; files are rendered during build time, and it&amp;rsquo;s possible to use the &lt;code&gt;helm&lt;/code&gt; templating syntax inside such files.&lt;/p&gt;
+&lt;p&gt;Given the following &lt;code&gt;definition.yaml&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;category&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;version&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;1.1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;additional_field&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;baz&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;A &lt;code&gt;build.yaml&lt;/code&gt; can look like the following, and interpolates it&amp;rsquo;s values during build time:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;image&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;...&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;steps&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;- &lt;span style=&#34;color:#000&#34;&gt;echo {{.Values.name}} &amp;gt; /package_name&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;- &lt;span style=&#34;color:#000&#34;&gt;echo {{.Values.additional_field}} &amp;gt; /extra&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Which would be for example automatically rendered by luet like the following:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;image&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;...&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;steps&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;- &lt;span style=&#34;color:#000&#34;&gt;echo test &amp;gt; /package_name&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;- &lt;span style=&#34;color:#000&#34;&gt;echo baz &amp;gt; /extra&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This mechanism can be used in collections as well, and each stanza in &lt;code&gt;packages&lt;/code&gt; is used to interpolate each single package.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://helm.sh/docs/chart_template_guide/&#34;&gt;Helm Template syntax guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://helm.sh/docs/chart_template_guide/function_list/&#34;&gt;Helm Templating functions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://helm.sh/docs/chart_template_guide/variables/&#34;&gt;Helm Templating variable&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mocaccinoOS/mocaccino-musl-universe/tree/master/multi-arch/packages/tar&#34;&gt;https://github.com/mocaccinoOS/mocaccino-musl-universe/tree/master/multi-arch/packages/tar&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
       </description>
     </item>
     
     <item>
       <title>Docs: Collections</title>
-      <link>https://luet-lab.github.io/docs/docs/packages/collections/</link>
+      <link>https://luet-lab.github.io/docs/docs/concepts/packages/collections/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://luet-lab.github.io/docs/docs/packages/collections/</guid>
+      <guid>https://luet-lab.github.io/docs/docs/concepts/packages/collections/</guid>
       <description>
         
         
-        &lt;p&gt;Luet supports the &lt;code&gt;helm&lt;/code&gt; rendering engine template. It&amp;rsquo;s being used to interpolate &lt;code&gt;build.yaml&lt;/code&gt; and &lt;code&gt;finalize.yaml&lt;/code&gt; files before their execution.&lt;/p&gt;
+        &lt;p&gt;&lt;code&gt;Collections&lt;/code&gt; are a special superset of packages. To define a collection, instead of using a &lt;code&gt;definition.yaml&lt;/code&gt; file, create a &lt;code&gt;collection.yaml&lt;/code&gt; file with a list of packages:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;packages&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;- &lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;  &lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;category&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;bar&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;  &lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;version&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;1.1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#000&#34;&gt;...&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Packages under a collection shares the same &lt;code&gt;build.yaml&lt;/code&gt; and &lt;code&gt;finalize.yaml&lt;/code&gt;, so a typical package layout can be:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;collection/
+    collection.yaml
+    build.yaml
+    finalize.yaml
+    ... additional files in the build context
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Luet during the build phase, will treat packages of a collection individually. A collection is a way to share the same build process across different packages.&lt;/p&gt;
+&lt;h2 id=&#34;templating&#34;&gt;Templating&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/templates&#34;&gt;The templating mechanism&lt;/a&gt; can be used in collections as well, and each stanza in &lt;code&gt;packages&lt;/code&gt; is used to interpolate each single package.&lt;/p&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mocaccinoOS/mocaccino-musl-universe/tree/master/multi-arch/packages/entities&#34;&gt;https://github.com/mocaccinoOS/mocaccino-musl-universe/tree/master/multi-arch/packages/entities&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mocaccinoOS/portage-tree/tree/master/multi-arch/packages/groups&#34;&gt;https://github.com/mocaccinoOS/portage-tree/tree/master/multi-arch/packages/groups&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mocaccinoOS/mocaccino-musl-universe/tree/master/multi-arch/packages/X&#34;&gt;https://github.com/mocaccinoOS/mocaccino-musl-universe/tree/master/multi-arch/packages/X&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
       </description>
     </item>
