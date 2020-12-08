@@ -6,7 +6,7 @@ description: >
   How to define packages and relations between packages
 ---
 
-A Package in Luet is denoted by a triple (`name`, `category` and `version`), here called *package form*. 
+A Package in Luet is denoted by a triple (`name`, `category` and `version`), here called *package form* in a `definition.yaml` file in YAML: 
 
 ```yaml
 name: "awesome"
@@ -14,31 +14,23 @@ version: "0.1"
 category: "foo"
 ```
 
-While `category` and `version` can be omitted, the name is required. Note that in the `build.yaml` and `definition.yaml` files, list of packages are represented by the same triplet:
+While `category` and `version` can be omitted, the name is required. Note that when refering to a package, the triplet is always present:
 
 ```yaml
 requires:
 - name: "awesome"
   version: "0.1"
   category: "foo"
-```
-
-They are nested in a list, allowing to specify as many as wanted:
-
-```yaml
-requires:
-- name: "awesome"
+- name: "bar"
   version: "0.1"
   category: "foo"
-- name: "awesome2"
-  version: "9999"
 ```
 
-## Package building process
+## Building process
 
 When a package is required to be built, Luet resolves the dependency trees and orders the spec files to satisfy the given contraints.
 
-Each package has a build context which corresponds to where the spec files are found (`definition.yaml` and `build.yaml`). This means that in the container, which is running the build process, the resources referred to the build are accessible. *Note: you can use this mechanism to provide helper scripts or even static binaries to seed your images from scratch*
+Each package build context is where the spec files are found (`definition.yaml` and `build.yaml`). This means that in the container, which is running the build process, the resources inside the package folder are accessible, as normally in Docker. *Note: you can use this mechanism to provide helper scripts or even static binaries to seed your images from scratch*
 
 ```
 ❯ tree distro/raspbian/buster
