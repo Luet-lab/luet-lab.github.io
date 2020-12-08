@@ -21,12 +21,12 @@ Systems that are using luet as a package manager can consume Luet repositories w
 
 The syntax proposed aims to be [KISS](https://en.wikipedia.org/wiki/KISS_principle) - you define a set of steps that need to be run to build your image, and a set of constraints denoting the requirements or conflicts of your package.
 
-# Why another Package manager?
+## Why another Package manager?
 
 There is no known package manager with 0-dependency that fully leverages the container ecosystem. This gap forces current package managers to depend on a specific system layout as base of the building process and the corresponding depencies. This can cause situations leading to a broken system. We want to fix that by empowering the user, by building their own packages, and redistribute them. 
 Luet allows also to create packages entirely from Docker images content. In this way the user can actually bundle all the files of an image into a package and deliver part of it, or entirely as a layer. All of that, without the package manager depending on a single bit from it.
 
-# Package definitions
+## Package definitions
 
 Luet uses [YAML](https://en.wikipedia.org/wiki/YAML) for the package specification format, Luet parses the [requirements](/docs/docs/concepts/constraints) to build [packages](/docs/docs/concepts/packages), so Luet can consume them.
 
