@@ -16,10 +16,13 @@ Luet currently supports [Docker](https://www.docker.com/) and [Img](https://gith
 
 Docker is the (less) experimental Luet engine supported. Be sure to have Docker installed and the daemon running. The user running `luet` commands needs the corresponding permissions to run the `docker` executable, and to connect to a `docker` daemon. The only feature needed by the daemon is the ability to build images, so it fully supports remote daemon as well (this can be specified with the `DOCKER_HOST` environment variable, that is respected by `luet`)
 
-
 ### Img
 
 Luet supports [Img](https://github.com/genuinetools/img). To use it, simply install it in your system, and while running `luet build`, you can switch the backend by providing it as a parameter: `luet build --backend img`. For small packages it is particularly powerful, as it doesn't require any docker daemon running in the host.
+
+### Building packages on Kubernetes
+
+Luet and img can be used together to orchestrate package builds on kubernetes. There is available an experimental [Kubernetes CRD for Luet](https://github.com/mudler/luet-k8s) which allows to build packages seamelessly in Kubernetes and push package artifacts to an S3 Compatible object storage (e.g. Minio).
 
 
 ![Build packages](/tree.jpg)
