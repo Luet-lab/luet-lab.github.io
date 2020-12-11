@@ -26,13 +26,13 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/overview/build_packages/" />
 <meta property="article:published_time" content="2017-01-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-12-08T17:12:25+01:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2020-12-11T23:08:04+01:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Building packages">
 <meta itemprop="description" content="How to build packages with Luet
 ">
 <meta itemprop="datePublished" content="2017-01-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2020-12-08T17:12:25+01:00" />
-<meta itemprop="wordCount" content="453">
+<meta itemprop="dateModified" content="2020-12-11T23:08:04+01:00" />
+<meta itemprop="wordCount" content="499">
 
 
 
@@ -143,7 +143,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.ac25fe02b4dca44c1ee70540f0c136ed.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.106737b7b3c840b5a4981bba46bc5ea1.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -175,7 +175,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.ac25fe02b4dca44c1ee70540f0c136ed.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.106737b7b3c840b5a4981bba46bc5ea1.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -551,6 +551,7 @@ if (!doNotTrack) {
       <ul>
         <li><a href="#docker">Docker</a></li>
         <li><a href="#img">Img</a></li>
+        <li><a href="#building-packages-on-kubernetes">Building packages on Kubernetes</a></li>
       </ul>
     </li>
     <li><a href="#environmental-variables">Environmental variables</a></li>
@@ -578,6 +579,8 @@ if (!doNotTrack) {
 <p>Docker is the (less) experimental Luet engine supported. Be sure to have Docker installed and the daemon running. The user running <code>luet</code> commands needs the corresponding permissions to run the <code>docker</code> executable, and to connect to a <code>docker</code> daemon. The only feature needed by the daemon is the ability to build images, so it fully supports remote daemon as well (this can be specified with the <code>DOCKER_HOST</code> environment variable, that is respected by <code>luet</code>)</p>
 <h3 id="img">Img</h3>
 <p>Luet supports <a href="https://github.com/genuinetools/img">Img</a>. To use it, simply install it in your system, and while running <code>luet build</code>, you can switch the backend by providing it as a parameter: <code>luet build --backend img</code>. For small packages it is particularly powerful, as it doesn&rsquo;t require any docker daemon running in the host.</p>
+<h3 id="building-packages-on-kubernetes">Building packages on Kubernetes</h3>
+<p>Luet and img can be used together to orchestrate package builds on kubernetes. There is available an experimental <a href="https://github.com/mudler/luet-k8s">Kubernetes CRD for Luet</a> which allows to build packages seamelessly in Kubernetes and push package artifacts to an S3 Compatible object storage (e.g. Minio).</p>
 <p><img src="/tree.jpg" alt="Build packages"></p>
 <p>Building a package with Luet requires only a <a href="/docs/docs/concepts/specfile">definition</a>. This definition can be self-contained and be only composed of one <a href="/docs/docs/concepts/specfile">specfile</a>, or a group of them, forming a Luet tree.</p>
 <p>Run <code>luet build --help</code> to get more help for each parameter.</p>
@@ -683,7 +686,7 @@ $&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package/definition.yaml
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified December 8, 2020: <a  href="https://github.com/Luet-lab/docs/commit/971d873dcf5ba03aa3034156168b0b758f22a901">Move overview under concepts (971d873)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified December 11, 2020: <a  href="https://github.com/Luet-lab/docs/commit/245e077c3b349d6213047c1bf3b4858e7392d141">Add a note on how to build packages on k8s (245e077)</a>
 </div>
 </div>
 
