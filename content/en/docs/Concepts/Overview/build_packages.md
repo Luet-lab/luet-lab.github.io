@@ -27,7 +27,7 @@ Luet and img can be used together to orchestrate package builds on kubernetes. T
 
 ![Build packages](/tree.jpg)
 
-Building a package with Luet requires only a [definition](/docs/docs/concepts/specfile). This definition can be self-contained and be only composed of one [specfile](/docs/docs/concepts/specfile), or a group of them, forming a Luet tree.
+Building a package with Luet requires only a [definition](/docs/docs/concepts/packages/specfile). This definition can be self-contained and be only composed of one [specfile](/docs/docs/concepts/packages/specfile), or a group of them, forming a Luet tree.
 
 Run `luet build --help` to get more help for each parameter.
 
@@ -43,9 +43,21 @@ Every argument from the CLI can be setted via environment variable too with a `L
 Additionally, you can set:
 - `DOCKER_SQUASH`: Set to `true` to squash each image being created (Docker backend only)
 
+## Supported compression format
+
+At the moment, `luet` can compress packages and tree with `zstd` and `gzip`. For example: 
+
+```bash
+luet build --compression zstd ...
+```
+
+Will output package compressed in the zstd format.
+
+See the `--help` of `create-repo` and `build` to learn all the available options.
+
 ## Example
 
-A [package definition](/docs/docs/concepts/specfile) is composed of a `build.yaml` and a `definition.yaml`:
+A [package definition](/docs/docs/concepts/packages/specfile) is composed of a `build.yaml` and a `definition.yaml`:
 
 ```bash
 $> mkdir package
