@@ -112,6 +112,7 @@ To include/exclude single files from it, use the `includes` and `excludes` direc
 Similarly, you can tell Luet to create a package from a folder in the build container. To enable this behavior, simply add `package_dir: "/path/to/final/dir"`.
 The directory must represent exactly how the files will be ultimately installed from clients, and they will show up in the same layout in the final archive.
 
+So for example, to create a package which ships `/usr/bin/mybin`, we could write:
 ```yaml
 steps:
 - mkdir -p /output/usr/bin/
