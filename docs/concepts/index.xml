@@ -36,7 +36,7 @@
 &lt;p&gt;There is no known package manager with 0-dependency that fully leverages the container ecosystem. This gap forces current package managers to depend on a specific system layout as base of the building process and the corresponding depencies. This can cause situations leading to a broken system. We want to fix that by empowering the user, by building their own packages, and redistribute them.
 Luet allows also to create packages entirely from Docker images content. In this way the user can actually bundle all the files of an image into a package and deliver part of it, or entirely as a layer. All of that, without the package manager depending on a single bit from it.&lt;/p&gt;
 &lt;h2 id=&#34;package-definitions&#34;&gt;Package definitions&lt;/h2&gt;
-&lt;p&gt;Luet uses &lt;a href=&#34;https://en.wikipedia.org/wiki/YAML&#34;&gt;YAML&lt;/a&gt; for the package specification format, Luet parses the &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/constraints&#34;&gt;requirements&lt;/a&gt; to build &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages&#34;&gt;packages&lt;/a&gt;, so Luet can consume them.&lt;/p&gt;
+&lt;p&gt;Luet uses &lt;a href=&#34;https://en.wikipedia.org/wiki/YAML&#34;&gt;YAML&lt;/a&gt; for the package specification format, Luet parses the &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/overview/constraints&#34;&gt;requirements&lt;/a&gt; to build &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages&#34;&gt;packages&lt;/a&gt;, so Luet can consume them.&lt;/p&gt;
 &lt;p&gt;Below you can find links to tutorials on how to build packages, images and repositories.&lt;/p&gt;
 
       </description>

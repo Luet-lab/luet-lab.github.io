@@ -31,7 +31,7 @@
 &lt;h3 id=&#34;building-packages-on-kubernetes&#34;&gt;Building packages on Kubernetes&lt;/h3&gt;
 &lt;p&gt;Luet and img can be used together to orchestrate package builds on kubernetes. There is available an experimental &lt;a href=&#34;https://github.com/mudler/luet-k8s&#34;&gt;Kubernetes CRD for Luet&lt;/a&gt; which allows to build packages seamelessly in Kubernetes and push package artifacts to an S3 Compatible object storage (e.g. Minio).&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://luet-lab.github.io/docs/tree.jpg&#34; alt=&#34;Build packages&#34;&gt;&lt;/p&gt;
-&lt;p&gt;Building a package with Luet requires only a &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/specfile&#34;&gt;definition&lt;/a&gt;. This definition can be self-contained and be only composed of one &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/specfile&#34;&gt;specfile&lt;/a&gt;, or a group of them, forming a Luet tree.&lt;/p&gt;
+&lt;p&gt;Building a package with Luet requires only a &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/specfile&#34;&gt;definition&lt;/a&gt;. This definition can be self-contained and be only composed of one &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/specfile&#34;&gt;specfile&lt;/a&gt;, or a group of them, forming a Luet tree.&lt;/p&gt;
 &lt;p&gt;Run &lt;code&gt;luet build --help&lt;/code&gt; to get more help for each parameter.&lt;/p&gt;
 &lt;p&gt;Build accepts a list of packages to build, which syntax is in the &lt;code&gt;category/name-version&lt;/code&gt; notation (following Gentoo syntax).&lt;/p&gt;
 &lt;h2 id=&#34;environmental-variables&#34;&gt;Environmental variables&lt;/h2&gt;
@@ -41,8 +41,13 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;DOCKER_SQUASH&lt;/code&gt;: Set to &lt;code&gt;true&lt;/code&gt; to squash each image being created (Docker backend only)&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;supported-compression-format&#34;&gt;Supported compression format&lt;/h2&gt;
+&lt;p&gt;At the moment, &lt;code&gt;luet&lt;/code&gt; can compress packages and tree with &lt;code&gt;zstd&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt;. For example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;luet build --compression zstd ...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Will output package compressed in the zstd format.&lt;/p&gt;
+&lt;p&gt;See the &lt;code&gt;--help&lt;/code&gt; of &lt;code&gt;create-repo&lt;/code&gt; and &lt;code&gt;build&lt;/code&gt; to learn all the available options.&lt;/p&gt;
 &lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
-&lt;p&gt;A &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/specfile&#34;&gt;package definition&lt;/a&gt; is composed of a &lt;code&gt;build.yaml&lt;/code&gt; and a &lt;code&gt;definition.yaml&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;A &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/specfile&#34;&gt;package definition&lt;/a&gt; is composed of a &lt;code&gt;build.yaml&lt;/code&gt; and a &lt;code&gt;definition.yaml&lt;/code&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$&amp;gt; mkdir package
 
 $&amp;gt; cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt;EOF &amp;gt; package/build.yaml
