@@ -36,7 +36,7 @@ Building a package with Luet requires only a [definition](/docs/docs/concepts/pa
 
 Run `luet build --help` to get more help for each parameter.
 
-Build accepts a list of packages to build, which syntax is in the `category/name-version` notation. See also [specfile documentation page](/docs/docs/concepts/packages/specfile) to see how to express packages from the CLI.
+Build accepts a list of packages to build, which syntax is in the `category/name-version` notation. See also [specfile documentation page](/docs/docs/concepts/packages/specfile/#refering-to-packages-from-the-cli) to see how to express packages from the CLI.
 
 ## Environmental variables
 
@@ -107,7 +107,9 @@ Luet "trees" are just a group of specfiles, in the above example, our tree was t
 
 In the example above we have created a package from a `delta`. Luet by default creates packages by analyzing the differences between the generated containers, and extracts the differences as archive, the resulting files then are compressed and can be consumed later on by `luet install`.
 
-Luet can create packages from different strategies: by delta, by taking a whole container content, or by considering a single directory in the build container. See the [package definition](/docs/docs/concepts/packages/specfile) for more details.
+Luet can create packages from different [building strategies](/docs/docs/concepts/packages/specfile/#building-strategies): by delta, by taking a whole container content, or by considering a single directory in the build container.
+
+Besides that, [a package can reference a strict dependency on others](/docs/docs/concepts/packages/specfile/#build-time-dependencies).
 
 ### Example
 
@@ -169,7 +171,7 @@ As we can see, now Luet generated 3 packages, `bar/foo`, `bar/ineedfoo` and `bar
 
  `bar/ineedfooandbar` depends on both `bar/ineedfoo` and `bar/foo` during build-time, while `bar/foo` uses a docker image as a build base.
 
-See the [package definition documentation page](/docs/docs/concepts/packages/specfile) for more details on how to instruct the Luet compiler to build packages with different strategies.
+See the [package definition documentation page](/docs/docs/concepts/packages/specfile/#building-strategies) for more details on how to instruct the Luet compiler to build packages with different strategies.
 
 ## Caching docker images
 
