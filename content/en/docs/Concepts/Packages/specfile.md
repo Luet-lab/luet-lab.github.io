@@ -139,9 +139,9 @@ Finalizers are denoted in a `finalize.yaml` file, which is a sibiling of `defini
 *finalize.yaml*:
 ```yaml
 install:
-- rc-update add docker default || true
+- rc-update add docker default
 ```
 
 #### Keywords
 
-- `install`: List of commands to run in the host machine. They are all fatal by default.
+- `install`: List of commands to run in the host machine. Failures are eventually ignored, but will be reported and luet will exit non-zero in such case.
