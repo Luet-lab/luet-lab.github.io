@@ -22,8 +22,6 @@ A list of requires and conflicts, composed of one or more [packages](/docs/docs/
 
 As Luet allows to express constraints with selectors ( e.g. `A depends on >=B-1.0`) it generates additional constraints to guarantee that at least one package and at most one is picked as dependency (*ALO* and *AMO*).
 
-At the moment of writing Luet is not encoding any order, but relies on the SAT solver and tries to enforce the order by forcing the engine to look at the "best" pick among a set of package. This is a known issue that we will address in the near future.
-
 ## Provides
 
 Provides constraints are not encoded in a SAT formula. Instead, they are `expanded` into an in-place substitution of the packages that they have to be replaced with.
