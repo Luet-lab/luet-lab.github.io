@@ -8,7 +8,7 @@ description: >
 
 Luet supports the [`helm` rendering engine template](https://helm.sh/docs/chart_template_guide/). It's being used to interpolate `build.yaml` and `finalize.yaml` files before their execution.
 
-The `build.yaml` and `finalize.yaml` files are rendered during build time, and it's possible to use the `helm` templating syntax inside such files.
+The `build.yaml` and `finalize.yaml` files are rendered during build time, and it's possible to use the `helm` templating syntax inside such files. The `definition.yaml` file will be used to interpolate templating values available in `build.yaml`
 
 Given the following `definition.yaml`:
 
@@ -44,6 +44,10 @@ steps:
 ```
 
 This mechanism can be used in collections as well, and each stanza in `packages` is used to interpolate each single package. 
+
+## Interpolating globally
+
+It's possible to interpolate during build phase all the package specs targeted for build with the ```--values``` flag, which takes a yaml file of an arbitrary format, if variables are clashing, the yaml supplied in `--values` takes precedence and overwrite the values of each single `definition.yaml` file.
 
 ## References
 
