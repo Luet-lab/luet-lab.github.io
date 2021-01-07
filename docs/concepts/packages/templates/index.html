@@ -25,12 +25,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/packages/templates/" />
-<meta property="article:modified_time" content="2020-12-08T17:31:43+01:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-01-07T18:24:29+01:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Templated packages">
 <meta itemprop="description" content="Use templates to fine tune build specs
 ">
-<meta itemprop="dateModified" content="2020-12-08T17:31:43+01:00" />
-<meta itemprop="wordCount" content="121">
+<meta itemprop="dateModified" content="2021-01-07T18:24:29+01:00" />
+<meta itemprop="wordCount" content="183">
 
 
 
@@ -141,7 +141,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.2e4890c7c411613903332a0ad699bc91.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.e32b48414cc648ecf5544b2d3ae65c03.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -173,7 +173,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.2e4890c7c411613903332a0ad699bc91.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.e32b48414cc648ecf5544b2d3ae65c03.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -543,6 +543,14 @@ if (!doNotTrack) {
 
 
 
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#interpolating-globally">Interpolating globally</a></li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#examples">Examples</a></li>
+  </ul>
+</nav>
+
 
 
           </div>
@@ -557,7 +565,7 @@ if (!doNotTrack) {
     <div class="lead">Use templates to fine tune build specs</div>
 	       
 	<p>Luet supports the <a href="https://helm.sh/docs/chart_template_guide/"><code>helm</code> rendering engine template</a>. It&rsquo;s being used to interpolate <code>build.yaml</code> and <code>finalize.yaml</code> files before their execution.</p>
-<p>The <code>build.yaml</code> and <code>finalize.yaml</code> files are rendered during build time, and it&rsquo;s possible to use the <code>helm</code> templating syntax inside such files.</p>
+<p>The <code>build.yaml</code> and <code>finalize.yaml</code> files are rendered during build time, and it&rsquo;s possible to use the <code>helm</code> templating syntax inside such files. The <code>definition.yaml</code> file will be used to interpolate templating values available in <code>build.yaml</code></p>
 <p>Given the following <code>definition.yaml</code>:</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;test&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;foo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
@@ -580,6 +588,8 @@ if (!doNotTrack) {
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">echo baz &gt; /extra</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline">
 </span></code></pre></div><p>This mechanism can be used in collections as well, and each stanza in <code>packages</code> is used to interpolate each single package.</p>
+<h2 id="interpolating-globally">Interpolating globally</h2>
+<p>It&rsquo;s possible to interpolate during build phase all the package specs targeted for build with the <code>--values</code> flag, which takes a yaml file of an arbitrary format, if variables are clashing, the yaml supplied in <code>--values</code> takes precedence and overwrite the values of each single <code>definition.yaml</code> file.</p>
 <h2 id="references">References</h2>
 <ul>
 <li><a href="https://helm.sh/docs/chart_template_guide/">Helm Template syntax guide</a></li>
@@ -653,7 +663,7 @@ if (!doNotTrack) {
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified December 8, 2020: <a  href="https://github.com/Luet-lab/docs/commit/b96c9a8100644b10e5cdf0976a515784560eb2eb">Reorganized sections and added docs about templated packages (b96c9a8)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified January 7, 2021: <a  href="https://github.com/Luet-lab/docs/commit/3a093e973191b7259a2573d2680de30b0398993a">Explain global build interpolation (3a093e9)</a>
 </div>
 </div>
 
