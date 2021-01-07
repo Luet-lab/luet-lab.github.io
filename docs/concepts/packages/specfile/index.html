@@ -25,12 +25,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/packages/specfile/" />
-<meta property="article:modified_time" content="2021-01-07T15:21:54+01:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-01-07T18:09:14+01:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Specfile">
 <meta itemprop="description" content="Luet specfile syntax
 ">
-<meta itemprop="dateModified" content="2021-01-07T15:21:54+01:00" />
-<meta itemprop="wordCount" content="547">
+<meta itemprop="dateModified" content="2021-01-07T18:09:14+01:00" />
+<meta itemprop="wordCount" content="1248">
 
 
 
@@ -141,7 +141,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.b948803460b374bdb7dc2f77f82f422f.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.83c1388e3e9bfdc1d62f35b55e1eb155.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -173,7 +173,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.b948803460b374bdb7dc2f77f82f422f.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.83c1388e3e9bfdc1d62f35b55e1eb155.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -545,11 +545,23 @@ if (!doNotTrack) {
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#specfiles">Specfiles</a>
+    <li><a href="#build-specs">Build specs</a>
       <ul>
-        <li><a href="#build-specs">Build specs</a></li>
-        <li><a href="#rutime-specs">Rutime specs</a></li>
-        <li><a href="#finalizers">Finalizers</a></li>
+        <li><a href="#building-strategies">Building strategies</a></li>
+        <li><a href="#build-time-dependencies">Build time dependencies</a></li>
+        <li><a href="#excludingincluding-files-explictly">Excluding/including files explictly</a></li>
+        <li><a href="#keywords">Keywords</a></li>
+      </ul>
+    </li>
+    <li><a href="#rutime-specs">Rutime specs</a>
+      <ul>
+        <li><a href="#keywords-1">Keywords</a></li>
+      </ul>
+    </li>
+    <li><a href="#refering-to-packages-from-the-cli">Refering to packages from the CLI</a></li>
+    <li><a href="#finalizers">Finalizers</a>
+      <ul>
+        <li><a href="#keywords-2">Keywords</a></li>
       </ul>
     </li>
   </ul>
@@ -568,7 +580,7 @@ if (!doNotTrack) {
 	<h1>Specfile</h1>
     <div class="lead">Luet specfile syntax</div>
 	       
-	<h2 id="specfiles">Specfiles</h2>
+	<h1 id="specfiles">Specfiles</h1>
 <p>Luet <a href="/docs/docs/concepts/packages/">packages</a> are defined by specfiles. Specfiles define the runtime and builtime requirements of a package.  There is an hard distinction between runtime and buildtime. A spec is composed at least by the runtime (<code>definition.yaml</code>) and the buildtime specification (<code>build.yaml</code>).</p>
 <p>Luet identifies the package definition by looking at directories that contains a <code>build.yaml</code> and a <code>definition.yaml</code> files. A Luet tree is merely a composition of directories that follows this convention. There is no constriction on either folder naming or hierarchy.</p>
 <p><em>Example of a <a href="https://github.com/Luet-lab/luet-embedded/tree/master/distro">tree folder hierarchy</a></em></p>
@@ -608,7 +620,7 @@ distro
 │   │   ├── build.yaml
 │   │   ├── definition.yaml
 │   │   └── finalize.yaml
-</code></pre></div><h3 id="build-specs">Build specs</h3>
+</code></pre></div><h2 id="build-specs">Build specs</h2>
 <p>Build specs are defined in <code>build.yaml</code> files. They denote the build-time <code>dependencies</code> and <code>conflicts</code>, together with a definition of the content of the package.</p>
 <p><em>Example of a <code>build.yaml</code> file</em>:</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">steps</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
@@ -630,7 +642,43 @@ distro
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/awesome</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">unpack</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">true</span><span style="color:#f8f8f8;text-decoration:underline">
-</span></code></pre></div><h4 id="keywords">Keywords</h4>
+</span></code></pre></div><h3 id="building-strategies">Building strategies</h3>
+<p>Luet can create packages with different strategies:</p>
+<ul>
+<li>by delta. Luet will analyze the containers differencies to find out which files got <strong>added</strong>.
+You can use the <code>prelude</code> section to exclude certains file during analysis.</li>
+<li>by taking a whole container content</li>
+<li>by considering a single directory in the build container.</li>
+</ul>
+<h4 id="package-by-delta">Package by delta</h4>
+<p>By default Luet will analyze the container content and extract any file that gets <strong>added</strong> to it. The difference is calculated by using the container which is depending on, or either by the container which is created by running the steps in the <code>prelude</code> section of the package build spec:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">prelude</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#8f5902;font-style:italic"># do something...</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">steps</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#8f5902;font-style:italic"># real work that should be calculated delta over</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><p>By omitting the <code>prelude</code> keyword, the delta will be calculated from the parent container where the build will start from.</p>
+<h4 id="package-by-container-content">Package by container content</h4>
+<p>Luet can also generate a package content from a container. This is really useful when creating packages that are entire versioned <code>rootfs</code>. To enable this behavior, simply add <code>unpack: true</code> to the <code>build.yaml</code>. This enables the Luet unpacking features, which will extract all the files contained in the container which is built from the <code>prelude</code> and <code>steps</code> fields.</p>
+<p>To include/exclude single files from it, use the <code>includes</code> and <code>excludes</code> directives.</p>
+<h4 id="package-by-a-folder-in-the-final-container">Package by a folder in the final container</h4>
+<p>Similarly, you can tell Luet to create a package from a folder in the build container. To enable this behavior, simply add `package_dir: &ldquo;/path/to/final/dir&rdquo;.
+The directory must represent exactly how the files will be ultimately installed from clients, and they will show up in the same layout in the final archive.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">steps</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">mkdir -p /output/usr/bin/</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">echo &#34;fancy stuff&#34; &gt; /output/usr/bin/mybin &amp;&amp; chmod +x /output/usr/bin/mybin</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><h3 id="build-time-dependencies">Build time dependencies</h3>
+<p>A package build spec defines how a package is built. In order to do this, Luet needs to know where to start. Hence a package must declare at least either one of the following:</p>
+<ul>
+<li>an <code>image</code> keyword which tells which Docker image to use as base, or</li>
+<li>a list of <code>requires</code>, which are references to other packages available in the tree.</li>
+</ul>
+<p>They can&rsquo;t be both present in the same specfile.</p>
+<p>To note, it&rsquo;s not possible to mix package build definitions from different <code>image</code> sources. They must form a unique sub-graph in the build dependency tree.</p>
+<p>On the other hand it&rsquo;s possible to have multiple packages depending on a combination of different <code>requires</code>, given they are coming from the same <code>image</code> parent.</p>
+<h3 id="excludingincluding-files-explictly">Excluding/including files explictly</h3>
+<p>Luet can also <em>exclude</em> and <em>include</em> single files or folders from a package by using the <code>excludes</code> and <code>includes</code> keyword respecitvely.</p>
+<p>Both of them are parsed as a list of Golang regex expressions, and they can be combined together to fine-grainly decide which files should be inside the final artifact. You can refer to the files as they were in the resulting package. So if a package produces a <code>/foo</code> file,  and you want to exclude it, you can add it to <code>excludes</code> as <code>/foo</code>.</p>
+<h3 id="keywords">Keywords</h3>
 <p>Global:</p>
 <ul>
 <li><code>env</code>: List of environment variables ( in <code>NAME=value</code> format ) that are expanded in <code>step</code> and in <code>prelude</code>. ( e.g. <code>${NAME}</code> ).</li>
@@ -638,18 +686,22 @@ distro
 <li><code>prelude</code>: List of commands to perform in the build container before building.</li>
 <li><code>unpack</code>: Boolean which indicates if the package content <strong>is</strong> the whole container content.</li>
 <li><code>includes</code>: List of strings which are encoded in logical AND, they denote the content to filter from the container image to be packed. Wildcards and golang regular expressions are supported. If specified, files not matching any of the regular expressions in the list won&rsquo;t be included in the final package.</li>
+<li><code>package_dir</code>: Directory from within the build container which contains the final artefacts of your package</li>
+<li><code>excludes</code>: List of golang regexes. They are in full path form (e.g. <code>^/usr/bin/foo</code> ) and indicates that the files listed shouldn&rsquo;t be part of the final artifact</li>
+<li><code>includes</code>: List of golang regexes. They are in full path form (e.g. <code>^/usr/bin/foo</code> ) and indicates that the files listed needs to be included as part of the final artifact</li>
 </ul>
+<p>By combining <code>excludes</code> with <code>includes</code>, it&rsquo;s possible to include certain files while excluding explicitly some others (<code>excludes</code> takes precedence over <code>includes</code>).</p>
 <p>Source from external image (e.g. Docker):</p>
 <ul>
-<li><code>image</code>: List of packages which it provides.</li>
+<li><code>image</code>: docker image to be used to build the package (might be omitted)</li>
 </ul>
 <p>From a tree dependency:</p>
 <ul>
 <li><code>requires</code>: List of packages which it depends on.</li>
 <li><code>conflicts</code>: List of packages which it conflicts with.</li>
 </ul>
-<h3 id="rutime-specs">Rutime specs</h3>
-<p>Runtime specification are denoted in a <code>definition.yaml</code> sibiling file. It identifies the package and the runtime contraints.</p>
+<h2 id="rutime-specs">Rutime specs</h2>
+<p>Runtime specification are denoted in a <code>definition.yaml</code> sibiling file. It identifies the package and the runtime contraints attached to it.</p>
 <p><em>definition.yaml</em>:</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;awesome&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;0.1&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
@@ -664,25 +716,34 @@ distro
 </span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">provides</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;&lt;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
-</span></code></pre></div><h4 id="keywords-1">Keywords</h4>
+</span></code></pre></div><h3 id="keywords-1">Keywords</h3>
 <p>Global:</p>
 <ul>
 <li><code>name</code>: Name of the package <strong>required</strong></li>
-<li><code>version</code>: Version of the package in semver notation. Selectors here are not supported. You can use selectors (<code>&gt;=</code>,<code>&lt;</code>,<code>&gt;</code>,<code>&lt;=</code>) only in dependency lists.</li>
+<li><code>version</code>: Version of the package in semver notation. Selectors (<code>&gt;=</code>,<code>&lt;</code>,<code>&gt;</code>,<code>&lt;=</code>) here are not supported. You can use selectors only in dependency lists.</li>
 <li><code>category</code>: Category of the package.</li>
 <li><code>provides</code>: List of packages which it replaces.</li>
+<li><code>hidden</code>: Boolean that indicates that the package should be hidden from <code>luet search</code>. Note packages can be still installed, they are just omitted to the user. You can inspect any time hidden packages with <code>luet search --hidden</code></li>
 </ul>
 <p>Runtime dependency list:</p>
 <ul>
 <li><code>requires</code>: List of packages which it depends on, in runtime.</li>
 <li><code>conflicts</code>: List of packages which it conflicts with, in runtime.</li>
 </ul>
-<h3 id="finalizers">Finalizers</h3>
+<h2 id="refering-to-packages-from-the-cli">Refering to packages from the CLI</h2>
+<p>All the <code>luet</code> commands which takes a package as argument, respect the following syntax notation:</p>
+<ul>
+<li><code>cat/name</code>: will default to selecting any available package</li>
+<li><code>=cat/name</code>: will default to gentoo parsing with regexp so also <code>=cat/name-1.1</code> works</li>
+<li><code>cat/name@version</code>: will select the specific version wanted ( e.g. <code>cat/name@1.1</code> ) but can also include ranges as well <code>cat/name@&gt;=1.1</code></li>
+<li><code>name</code>: just name, category is omitted and considered empty</li>
+</ul>
+<h2 id="finalizers">Finalizers</h2>
 <p>Finalizers are denoted in a <code>finalize.yaml</code> file, which is a sibiling of <code>definition.yaml</code> and <code>build.yaml</code> file. It contains a list of commands that finalize the package when it is installed in the machine.</p>
 <p><em>finalize.yaml</em>:</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">install</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">rc-update add docker default</span><span style="color:#f8f8f8;text-decoration:underline">
-</span></code></pre></div><h4 id="keywords-2">Keywords</h4>
+</span></code></pre></div><h3 id="keywords-2">Keywords</h3>
 <ul>
 <li><code>install</code>: List of commands to run in the host machine. Failures are eventually ignored, but will be reported and luet will exit non-zero in such case.</li>
 </ul>
@@ -749,7 +810,7 @@ distro
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified January 7, 2021: <a  href="https://github.com/Luet-lab/docs/commit/1312d29755ef148be52713a4f4a38b04d0759850">Update finalizer docs (1312d29)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified January 7, 2021: <a  href="https://github.com/Luet-lab/docs/commit/a88ac0173310e832b64285feb31e0bf47d57b791">Add documentation about building strategies (a88ac01)</a>
 </div>
 </div>
 

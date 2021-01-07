@@ -26,13 +26,13 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/overview/build_packages/" />
 <meta property="article:published_time" content="2017-01-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2021-01-07T15:18:17+01:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-01-07T18:09:14+01:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Building packages">
 <meta itemprop="description" content="How to build packages with Luet
 ">
 <meta itemprop="datePublished" content="2017-01-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2021-01-07T15:18:17+01:00" />
-<meta itemprop="wordCount" content="543">
+<meta itemprop="dateModified" content="2021-01-07T18:09:14+01:00" />
+<meta itemprop="wordCount" content="1207">
 
 
 
@@ -143,7 +143,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.b948803460b374bdb7dc2f77f82f422f.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.83c1388e3e9bfdc1d62f35b55e1eb155.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -175,7 +175,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.b948803460b374bdb7dc2f77f82f422f.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.83c1388e3e9bfdc1d62f35b55e1eb155.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -554,9 +554,20 @@ if (!doNotTrack) {
         <li><a href="#building-packages-on-kubernetes">Building packages on Kubernetes</a></li>
       </ul>
     </li>
+    <li><a href="#building-packages">Building packages</a></li>
     <li><a href="#environmental-variables">Environmental variables</a></li>
     <li><a href="#supported-compression-format">Supported compression format</a></li>
     <li><a href="#example">Example</a></li>
+    <li><a href="#nesting-dependencies">Nesting dependencies</a>
+      <ul>
+        <li><a href="#example-1">Example</a></li>
+      </ul>
+    </li>
+    <li><a href="#caching-docker-images">Caching docker images</a>
+      <ul>
+        <li><a href="#build-faster">Build faster</a></li>
+      </ul>
+    </li>
     <li><a href="#notes">Notes</a></li>
   </ul>
 </nav>
@@ -581,11 +592,14 @@ if (!doNotTrack) {
 <h3 id="img">Img</h3>
 <p>Luet supports <a href="https://github.com/genuinetools/img">Img</a>. To use it, simply install it in your system, and while running <code>luet build</code>, you can switch the backend by providing it as a parameter: <code>luet build --backend img</code>. For small packages it is particularly powerful, as it doesn&rsquo;t require any docker daemon running in the host.</p>
 <h3 id="building-packages-on-kubernetes">Building packages on Kubernetes</h3>
-<p>Luet and img can be used together to orchestrate package builds on kubernetes. There is available an experimental <a href="https://github.com/mudler/luet-k8s">Kubernetes CRD for Luet</a> which allows to build packages seamelessly in Kubernetes and push package artifacts to an S3 Compatible object storage (e.g. Minio).</p>
-<p><img src="/tree.jpg" alt="Build packages"></p>
-<p>Building a package with Luet requires only a <a href="/docs/docs/concepts/packages/specfile">definition</a>. This definition can be self-contained and be only composed of one <a href="/docs/docs/concepts/packages/specfile">specfile</a>, or a group of them, forming a Luet tree.</p>
+<p>Luet and img can be used together to orchestrate package builds also on kubernetes. There is available an experimental <a href="https://github.com/mudler/luet-k8s">Kubernetes CRD for Luet</a> which allows to build packages seamelessly in Kubernetes and push package artifacts to an S3 Compatible object storage (e.g. Minio).</p>
+<h2 id="building-packages">Building packages</h2>
+<p><img src="/docs/tree.jpg" alt="Build packages"></p>
+<p>Luet provides an abstraction layer on top of the container image layer to make the package a first class construct. A package definition and all its dependencies are translated by Luet to Dockerfiles which can then be built anywhere that docker runs.</p>
+<p>To resolve the dependency tree Luet uses a SAT solver and no database. It is responsible for calculating the dependencies of a package and to prevent conflicts. The Luet core is still young, but it has a comprehensive test suite that we use to validate any future changes.</p>
+<p>Building a package with Luet requires only a <a href="/docs/docs/concepts/packages/specfile">definition</a>. This definition can be self-contained and be only composed of one <a href="/docs/docs/concepts/packages/specfile">specfile</a>, or a group of them, forming a Luet tree. For more complex use-cases, see <a href="/docs/docs/concepts/packages/collections">collections</a>.</p>
 <p>Run <code>luet build --help</code> to get more help for each parameter.</p>
-<p>Build accepts a list of packages to build, which syntax is in the <code>category/name-version</code> notation (following Gentoo syntax).</p>
+<p>Build accepts a list of packages to build, which syntax is in the <code>category/name-version</code> notation. See also <a href="/docs/docs/concepts/packages/specfile">specfile documentation page</a> to see how to express packages from the CLI.</p>
 <h2 id="environmental-variables">Environmental variables</h2>
 <p>Luet builds passes its environment variable at the engine which is called during build, so for example the environment variable <code>DOCKER_HOST</code> or <code>DOCKER_BUILDKIT</code> can be setted.</p>
 <p>Every argument from the CLI can be setted via environment variable too with a <code>LUET_</code> prefix, for instance the flag <code>--clean</code>, can be setted via environment with <code>LUET_CLEAN</code>, <code>--privileged</code> can be enabled with <code>LUET_PRIVILEGED</code> and so on.</p>
@@ -599,19 +613,22 @@ if (!doNotTrack) {
 </code></pre></div><p>Will output package compressed in the zstd format.</p>
 <p>See the <code>--help</code> of <code>create-repo</code> and <code>build</code> to learn all the available options.</p>
 <h2 id="example">Example</h2>
-<p>A <a href="/docs/docs/concepts/packages/specfile">package definition</a> is composed of a <code>build.yaml</code> and a <code>definition.yaml</code>:</p>
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$&gt; mkdir package
+<p>A <a href="/docs/docs/concepts/packages/specfile">package definition</a> is composed of a <code>build.yaml</code> and a sibiling <code>definition.yaml</code>.</p>
+<p>In the following example, we are creating a dummy package (<code>bar/foo</code>). Which ships one file only, <code>/foo</code></p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$&gt; <span style="color:#8f5902;font-style:italic"># put yourself in some workdir</span>
 
-$&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package/build.yaml
+$~/workdir&gt; mkdir package
+
+$~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package/build.yaml
 </span><span style="color:#4e9a06">image: busybox
 </span><span style="color:#4e9a06">steps:
-</span><span style="color:#4e9a06">- echo &#34;foo&#34; &gt; /foo
+</span><span style="color:#4e9a06">- echo &#34;foo=bar&#34; &gt; /foo
 </span><span style="color:#4e9a06">EOF</span>
 
-$&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package/definition.yaml
+$~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package/definition.yaml
 </span><span style="color:#4e9a06">name: &#34;foo&#34;
 </span><span style="color:#4e9a06">version: &#34;0.1&#34;
-</span><span style="color:#4e9a06">category: &#34;bar&#34; # optional!
+</span><span style="color:#4e9a06">category: &#34;bar&#34;
 </span><span style="color:#4e9a06">EOF</span>
 
 </code></pre></div><p>To build it, simply run <code>luet build bar/foo</code> or <code>luet build --all</code> to build all the packages in the current directory:</p>
@@ -627,8 +644,71 @@ $&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package/definition.yaml
  Sending build context to Docker daemon  4.096kB
  ...
 
-</code></pre></div><h2 id="notes">Notes</h2>
-<p>If you notice errors about disk space, mind to set the <code>TMPDIR</code> env variable to a different folder. By default luet respects the O.S. default (which in the majority of system is <code>/tmp</code>).</p>
+</code></pre></div><p>Luet &ldquo;trees&rdquo; are just a group of specfiles, in the above example, our tree was the current directory. You can also specify a directory with the <code>--tree</code> option. Luet doesn&rsquo;t enforce any tree layout, so they can be nested at any level. The only rule of thumb is that a <code>build.yaml</code> file needs to have either a <code>definition.yaml</code> or a <code>collection.yaml</code> file next to it.</p>
+<h2 id="nesting-dependencies">Nesting dependencies</h2>
+<p>In the example above we have created a package from a <code>delta</code>. Luet by default creates packages by analyzing the differences between the generated containers, and extracts the differences as archive, the resulting files then are compressed and can be consumed later on by <code>luet install</code>.</p>
+<p>Luet can create packages from different strategies: by delta, by taking a whole container content, or by considering a single directory in the build container. See the <a href="/docs/docs/concepts/packages/specfile">package definition</a> for more details.</p>
+<h3 id="example-1">Example</h3>
+<p>Let&rsquo;s extend the above example with two packages which depends on it during the build phase.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
+$~/workdir&gt; mkdir package2
+
+$~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package2/build.yaml
+</span><span style="color:#4e9a06">requires:
+</span><span style="color:#4e9a06">- name: &#34;foo&#34;
+</span><span style="color:#4e9a06">  category: &#34;bar&#34;
+</span><span style="color:#4e9a06">  version: &#34;&gt;=0&#34;
+</span><span style="color:#4e9a06">
+</span><span style="color:#4e9a06">steps:
+</span><span style="color:#4e9a06">- source /foo &amp;&amp; echo &#34;$foo&#34; &gt; /bar
+</span><span style="color:#4e9a06">EOF</span>
+
+$~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package2/definition.yaml
+</span><span style="color:#4e9a06">name: &#34;ineedfoo&#34;
+</span><span style="color:#4e9a06">version: &#34;0.1&#34;
+</span><span style="color:#4e9a06">category: &#34;bar&#34;
+</span><span style="color:#4e9a06">EOF</span>
+
+
+$~/workdir&gt; mkdir package3
+
+$~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package3/build.yaml
+</span><span style="color:#4e9a06">requires:
+</span><span style="color:#4e9a06">- name: &#34;foo&#34;
+</span><span style="color:#4e9a06">  category: &#34;bar&#34;
+</span><span style="color:#4e9a06">  version: &#34;&gt;=0&#34;
+</span><span style="color:#4e9a06">- name: &#34;ineedfoo&#34;
+</span><span style="color:#4e9a06">  category: &#34;bar&#34;
+</span><span style="color:#4e9a06">  version: &#34;&gt;=0&#34;
+</span><span style="color:#4e9a06">
+</span><span style="color:#4e9a06">steps:
+</span><span style="color:#4e9a06">- source /foo &amp;&amp; echo &#34;$foo&#34; &gt; /ineedboth
+</span><span style="color:#4e9a06">- cat /bar &gt; /bar
+</span><span style="color:#4e9a06">
+</span><span style="color:#4e9a06">EOF</span>
+
+$~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package3/definition.yaml
+</span><span style="color:#4e9a06">name: &#34;ineedfooandbar&#34;
+</span><span style="color:#4e9a06">version: &#34;0.1&#34;
+</span><span style="color:#4e9a06">category: &#34;bar&#34;
+</span><span style="color:#4e9a06">EOF</span>
+
+</code></pre></div><p>To build, run again:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$&gt; luet build --all
+</code></pre></div><p>As we can see, now Luet generated 3 packages, <code>bar/foo</code>, <code>bar/ineedfoo</code> and <code>bar/ineedfooandbar</code>. They aren&rsquo;t doing anything special than just shipping text files, this is an illustrative example on how build requirements can be combined to form new packages:</p>
+<p><code>bar/ineedfooandbar</code> depends on both <code>bar/ineedfoo</code> and <code>bar/foo</code> during build-time, while <code>bar/foo</code> uses a docker image as a build base.</p>
+<p>See the <a href="/docs/docs/concepts/packages/specfile">package definition documentation page</a> for more details on how to instruct the Luet compiler to build packages with different strategies.</p>
+<h2 id="caching-docker-images">Caching docker images</h2>
+<p>Luet can push and pull the docker images that are being generated during the build process. A tree is represented by a single docker image, and each package can have one or more tags attached to it.</p>
+<p>To push automatically docker images that are built, use the <code>--push</code> option, to pull, use the <code>--pull</code> option. An image repository can be specified with <code>--image-repository</code> flag, and can include also the remote registries where the images are pushed to.</p>
+<p>Luet doesn&rsquo;t handle login to registries, so that has to be handled separately with <code>docker login</code> or <code>img login</code> before the build process starts.</p>
+<h3 id="build-faster">Build faster</h3>
+<p>When packages are cached, for iterating locally it&rsquo;s particularly useful to jump straight to the image that you want to build. You can use <code>--only-target-package</code> to jump directly to the image you are interested in. Luet will take care of checking if the images are present in the remote registry, and would build them if any of those are missing.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>All the files which are next to a <code>build.yaml</code> are copied in the container which is running your build, so they are always accessible during build time.</li>
+<li>If you notice errors about disk space, mind to set the <code>TMPDIR</code> env variable to a different folder. By default luet respects the O.S. default (which in the majority of system is <code>/tmp</code>).</li>
+</ul>
 
 	
 		<style>
@@ -692,7 +772,7 @@ $&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package/definition.yaml
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified January 7, 2021: <a  href="https://github.com/Luet-lab/docs/commit/72625006666694796d89c762c0f4f7259db9e2be">Fixup broken links and mention different compression available (7262500)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified January 7, 2021: <a  href="https://github.com/Luet-lab/docs/commit/a88ac0173310e832b64285feb31e0bf47d57b791">Add documentation about building strategies (a88ac01)</a>
 </div>
 </div>
 
