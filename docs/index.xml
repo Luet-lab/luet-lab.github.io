@@ -783,7 +783,6 @@ $&amp;gt; luet build bar/foo-0.1 --compression gzip
 &lt;h2 id=&#34;requires-and-conflicts&#34;&gt;Requires and Conflicts&lt;/h2&gt;
 &lt;p&gt;A list of requires and conflicts, composed of one or more &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages/&#34;&gt;packages&lt;/a&gt;, becomes a SAT formula. The formula is then given to the SAT solver to compute a finite state set of packages which must be installed in the system in order to met the requirements.&lt;/p&gt;
 &lt;p&gt;As Luet allows to express constraints with selectors ( e.g. &lt;code&gt;A depends on &amp;gt;=B-1.0&lt;/code&gt;) it generates additional constraints to guarantee that at least one package and at most one is picked as dependency (&lt;em&gt;ALO&lt;/em&gt; and &lt;em&gt;AMO&lt;/em&gt;).&lt;/p&gt;
-&lt;p&gt;At the moment of writing Luet is not encoding any order, but relies on the SAT solver and tries to enforce the order by forcing the engine to look at the &amp;ldquo;best&amp;rdquo; pick among a set of package. This is a known issue that we will address in the near future.&lt;/p&gt;
 &lt;h2 id=&#34;provides&#34;&gt;Provides&lt;/h2&gt;
 &lt;p&gt;Provides constraints are not encoded in a SAT formula. Instead, they are &lt;code&gt;expanded&lt;/code&gt; into an in-place substitution of the packages that they have to be replaced with.
 They share the same SAT logic of expansion, allowing to swap entire version ranges (e.g. &lt;code&gt;&amp;gt;=1.0&lt;/code&gt;), allowing to handle package rename, removals, and virtuals.&lt;/p&gt;
