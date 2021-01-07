@@ -26,13 +26,13 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/overview/build_packages/" />
 <meta property="article:published_time" content="2017-01-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2021-01-07T18:09:14+01:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-01-07T18:21:12+01:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Building packages">
 <meta itemprop="description" content="How to build packages with Luet
 ">
 <meta itemprop="datePublished" content="2017-01-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2021-01-07T18:09:14+01:00" />
-<meta itemprop="wordCount" content="1207">
+<meta itemprop="dateModified" content="2021-01-07T18:21:12+01:00" />
+<meta itemprop="wordCount" content="1212">
 
 
 
@@ -143,7 +143,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.eb29ffd9390f57722963c267b3574f9d.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.2e4890c7c411613903332a0ad699bc91.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -175,7 +175,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.eb29ffd9390f57722963c267b3574f9d.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.2e4890c7c411613903332a0ad699bc91.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -599,7 +599,7 @@ if (!doNotTrack) {
 <p>To resolve the dependency tree Luet uses a SAT solver and no database. It is responsible for calculating the dependencies of a package and to prevent conflicts. The Luet core is still young, but it has a comprehensive test suite that we use to validate any future changes.</p>
 <p>Building a package with Luet requires only a <a href="/docs/docs/concepts/packages/specfile">definition</a>. This definition can be self-contained and be only composed of one <a href="/docs/docs/concepts/packages/specfile">specfile</a>, or a group of them, forming a Luet tree. For more complex use-cases, see <a href="/docs/docs/concepts/packages/collections">collections</a>.</p>
 <p>Run <code>luet build --help</code> to get more help for each parameter.</p>
-<p>Build accepts a list of packages to build, which syntax is in the <code>category/name-version</code> notation. See also <a href="/docs/docs/concepts/packages/specfile">specfile documentation page</a> to see how to express packages from the CLI.</p>
+<p>Build accepts a list of packages to build, which syntax is in the <code>category/name-version</code> notation. See also <a href="/docs/docs/concepts/packages/specfile/#refering-to-packages-from-the-cli">specfile documentation page</a> to see how to express packages from the CLI.</p>
 <h2 id="environmental-variables">Environmental variables</h2>
 <p>Luet builds passes its environment variable at the engine which is called during build, so for example the environment variable <code>DOCKER_HOST</code> or <code>DOCKER_BUILDKIT</code> can be setted.</p>
 <p>Every argument from the CLI can be setted via environment variable too with a <code>LUET_</code> prefix, for instance the flag <code>--clean</code>, can be setted via environment with <code>LUET_CLEAN</code>, <code>--privileged</code> can be enabled with <code>LUET_PRIVILEGED</code> and so on.</p>
@@ -647,7 +647,8 @@ $~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package/definiti
 </code></pre></div><p>Luet &ldquo;trees&rdquo; are just a group of specfiles, in the above example, our tree was the current directory. You can also specify a directory with the <code>--tree</code> option. Luet doesn&rsquo;t enforce any tree layout, so they can be nested at any level. The only rule of thumb is that a <code>build.yaml</code> file needs to have either a <code>definition.yaml</code> or a <code>collection.yaml</code> file next to it.</p>
 <h2 id="nesting-dependencies">Nesting dependencies</h2>
 <p>In the example above we have created a package from a <code>delta</code>. Luet by default creates packages by analyzing the differences between the generated containers, and extracts the differences as archive, the resulting files then are compressed and can be consumed later on by <code>luet install</code>.</p>
-<p>Luet can create packages from different strategies: by delta, by taking a whole container content, or by considering a single directory in the build container. See the <a href="/docs/docs/concepts/packages/specfile">package definition</a> for more details.</p>
+<p>Luet can create packages from different <a href="/docs/docs/concepts/packages/specfile/#building-strategies">building strategies</a>: by delta, by taking a whole container content, or by considering a single directory in the build container.</p>
+<p>Besides that, <a href="/docs/docs/concepts/packages/specfile/#build-time-dependencies">a package can reference a strict dependency on others</a>.</p>
 <h3 id="example-1">Example</h3>
 <p>Let&rsquo;s extend the above example with two packages which depends on it during the build phase.</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
@@ -697,7 +698,7 @@ $~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package3/definit
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$&gt; luet build --all
 </code></pre></div><p>As we can see, now Luet generated 3 packages, <code>bar/foo</code>, <code>bar/ineedfoo</code> and <code>bar/ineedfooandbar</code>. They aren&rsquo;t doing anything special than just shipping text files, this is an illustrative example on how build requirements can be combined to form new packages:</p>
 <p><code>bar/ineedfooandbar</code> depends on both <code>bar/ineedfoo</code> and <code>bar/foo</code> during build-time, while <code>bar/foo</code> uses a docker image as a build base.</p>
-<p>See the <a href="/docs/docs/concepts/packages/specfile">package definition documentation page</a> for more details on how to instruct the Luet compiler to build packages with different strategies.</p>
+<p>See the <a href="/docs/docs/concepts/packages/specfile/#building-strategies">package definition documentation page</a> for more details on how to instruct the Luet compiler to build packages with different strategies.</p>
 <h2 id="caching-docker-images">Caching docker images</h2>
 <p>Luet can push and pull the docker images that are being generated during the build process. A tree is represented by a single docker image, and each package can have one or more tags attached to it.</p>
 <p>To push automatically docker images that are built, use the <code>--push</code> option, to pull, use the <code>--pull</code> option. An image repository can be specified with <code>--image-repository</code> flag, and can include also the remote registries where the images are pushed to.</p>
@@ -772,7 +773,7 @@ $~/workdir&gt; cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; package3/definit
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified January 7, 2021: <a  href="https://github.com/Luet-lab/docs/commit/a88ac0173310e832b64285feb31e0bf47d57b791">Add documentation about building strategies (a88ac01)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified January 7, 2021: <a  href="https://github.com/Luet-lab/docs/commit/486c055b3478a1b7be9702da03726a8b7a62f2b6">Update links (486c055)</a>
 </div>
 </div>
 
