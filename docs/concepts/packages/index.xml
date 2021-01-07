@@ -135,10 +135,10 @@ distro
 &lt;p&gt;Finalizers are denoted in a &lt;code&gt;finalize.yaml&lt;/code&gt; file, which is a sibiling of &lt;code&gt;definition.yaml&lt;/code&gt; and &lt;code&gt;build.yaml&lt;/code&gt; file. It contains a list of commands that finalize the package when it is installed in the machine.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;finalize.yaml&lt;/em&gt;:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;install&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;- &lt;span style=&#34;color:#000&#34;&gt;rc-update add docker default || true&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;&lt;/span&gt;- &lt;span style=&#34;color:#000&#34;&gt;rc-update add docker default&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;keywords-2&#34;&gt;Keywords&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;install&lt;/code&gt;: List of commands to run in the host machine. They are all fatal by default.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;install&lt;/code&gt;: List of commands to run in the host machine. Failures are eventually ignored, but will be reported and luet will exit non-zero in such case.&lt;/li&gt;
 &lt;/ul&gt;
 
       </description>

@@ -25,12 +25,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/packages/specfile/" />
-<meta property="article:modified_time" content="2020-12-08T17:31:43+01:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-01-07T15:21:54+01:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Specfile">
 <meta itemprop="description" content="Luet specfile syntax
 ">
-<meta itemprop="dateModified" content="2020-12-08T17:31:43+01:00" />
-<meta itemprop="wordCount" content="539">
+<meta itemprop="dateModified" content="2021-01-07T15:21:54+01:00" />
+<meta itemprop="wordCount" content="547">
 
 
 
@@ -141,7 +141,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.7e4a4dbd4e073b63c83f0e8127c9160d.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.8ecf488736f7510c695c379107e95ec1.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -173,7 +173,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.7e4a4dbd4e073b63c83f0e8127c9160d.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.8ecf488736f7510c695c379107e95ec1.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -681,10 +681,10 @@ distro
 <p>Finalizers are denoted in a <code>finalize.yaml</code> file, which is a sibiling of <code>definition.yaml</code> and <code>build.yaml</code> file. It contains a list of commands that finalize the package when it is installed in the machine.</p>
 <p><em>finalize.yaml</em>:</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">install</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
-</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">rc-update add docker default || true</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">rc-update add docker default</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></code></pre></div><h4 id="keywords-2">Keywords</h4>
 <ul>
-<li><code>install</code>: List of commands to run in the host machine. They are all fatal by default.</li>
+<li><code>install</code>: List of commands to run in the host machine. Failures are eventually ignored, but will be reported and luet will exit non-zero in such case.</li>
 </ul>
 
 	
@@ -749,7 +749,7 @@ distro
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified December 8, 2020: <a  href="https://github.com/Luet-lab/docs/commit/b96c9a8100644b10e5cdf0976a515784560eb2eb">Reorganized sections and added docs about templated packages (b96c9a8)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified January 7, 2021: <a  href="https://github.com/Luet-lab/docs/commit/1312d29755ef148be52713a4f4a38b04d0759850">Update finalizer docs (1312d29)</a>
 </div>
 </div>
 
