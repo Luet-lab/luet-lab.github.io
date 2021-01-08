@@ -114,6 +114,7 @@ The directory must represent exactly how the files will be ultimately installed 
 
 So for example, to create a package which ships `/usr/bin/mybin`, we could write:
 ```yaml
+package_dir: "/output"
 steps:
 - mkdir -p /output/usr/bin/
 - echo "fancy stuff" > /output/usr/bin/mybin && chmod +x /output/usr/bin/mybin
