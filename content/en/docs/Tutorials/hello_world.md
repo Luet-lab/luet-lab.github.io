@@ -126,7 +126,7 @@ EOF
 
 # Build packages
 
-The simplest and mostly immediate way to build packages, is running `luet build <packagename` in the same folder you have your Luet tree.
+The simplest and mostly immediate way to build packages, is running `luet build <packagename>` in the same folder you have your Luet tree.
 
 In this case, to build gogs and its deps, we can do:
 
