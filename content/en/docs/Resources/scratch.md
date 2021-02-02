@@ -19,7 +19,7 @@ repositories:
     priority: 1
     type: "http"
     urls: 
-    - "https://get.mocaccino.org/moacccino-micro-stable"
+    - "https://get.mocaccino.org/mocaccino-micro-stable"
 EOF
 
 docker rm luet-runtime-test || true
