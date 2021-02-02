@@ -138,7 +138,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.68d0dd7b1f81c9ab30768b76d82932e4.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.e6269b45b9d4ecd2c46ecc81f2b72fbd.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >

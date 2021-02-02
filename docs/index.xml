@@ -235,7 +235,7 @@ For this purpose, we have picked a real-world example: &lt;a href=&#34;https://g
 &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;version: &amp;#34;0.11.91&amp;#34;
 &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;EOF&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;build-packages&#34;&gt;Build packages&lt;/h1&gt;
-&lt;p&gt;The simplest and mostly immediate way to build packages, is running &lt;code&gt;luet build &amp;lt;packagename&lt;/code&gt; in the same folder you have your Luet tree.&lt;/p&gt;
+&lt;p&gt;The simplest and mostly immediate way to build packages, is running &lt;code&gt;luet build &amp;lt;packagename&amp;gt;&lt;/code&gt; in the same folder you have your Luet tree.&lt;/p&gt;
 &lt;p&gt;In this case, to build gogs and its deps, we can do:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;luet build dev-vcs/gogs
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And that&amp;rsquo;s it! you will find the package archives in &lt;code&gt;build/&lt;/code&gt; in the same folder where you started the command.&lt;/p&gt;
