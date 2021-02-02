@@ -160,7 +160,87 @@ $~/workdir&amp;gt; cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt
       <description>
         
         
-        
+        &lt;p&gt;This article will guide you to build your first package with Luet!
+For this purpose, we have picked a real-world example: &lt;a href=&#34;https://github.com/gogs/gogs&#34;&gt;gogs&lt;/a&gt; which is a &amp;ldquo;painless self-hosted Git service&amp;rdquo;, an open-source alternative to Github.&lt;/p&gt;
+&lt;p&gt;Gogs is written in Golang, and we need a working Golang version in order to build it.&lt;/p&gt;
+&lt;h1 id=&#34;define-a-luet-tree&#34;&gt;Define a Luet tree&lt;/h1&gt;
+&lt;p&gt;Everything starts from a Luet tree. A Luet tree is just a directory containing one (or more) Luet specfile, here on we assume that you are working in a dedicated folder (e.g. &lt;code&gt;~/demo&lt;/code&gt;) in your system.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s create then a package that will be our base to build other packages from now on, we have picked &lt;code&gt;busybox&lt;/code&gt; here - it is really small and enough for our purpose.&lt;/p&gt;
+&lt;h2 id=&#34;busybox&#34;&gt;busybox&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mkdir busybox
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s now write the build specification, which is just containing the image tag that we are referencing to&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt;EOF &amp;gt; busybox/build.yaml
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;image: &amp;#34;busybox:{{.Values.version}}-glibc&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;EOF&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now, lets write the &lt;code&gt;definition.yaml&lt;/code&gt;, which contains the metadata information about our package ( e.g. how we refer to it with luet, the version, and so on )&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt;EOF &amp;gt; busybox/definition.yaml
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;category: &amp;#34;distro&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;name: &amp;#34;busybox&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;version: &amp;#34;1.33.0&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;EOF&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;golang&#34;&gt;golang&lt;/h2&gt;
+&lt;p&gt;We need now golang in order to build &lt;code&gt;gogs&lt;/code&gt;. Let&amp;rsquo;s declare then a golang package:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mkdir golang
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And a build specfile, which is simply fetch golang from &lt;a href=&#34;https://golang.org&#34;&gt;https://golang.org&lt;/a&gt; and installing it in the busybox container:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt;EOF &amp;gt; golang/build.yaml
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;requires:
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- category: &amp;#34;distro&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;  name: &amp;#34;busybox&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;  version: &amp;#34;&amp;gt;=0&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;prelude:
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- wget https://golang.org/dl/go{{.Values.version}}.linux-{{.Values.arch}}.tar.gz -O golang.tar.gz
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- mkdir /usr/local
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;steps:
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- tar -C /usr/local -xzf golang.tar.gz
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;EOF&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Note how we &lt;code&gt;require&lt;/code&gt; busybox. The Golang container will now be based from busybox, and the &lt;code&gt;prelude&lt;/code&gt; and &lt;code&gt;steps&lt;/code&gt; fields will be executed in that context.&lt;/p&gt;
+&lt;p&gt;And finally let&amp;rsquo;s write the golang metadata files, so we can refer to it from other packages&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt;EOF &amp;gt; golang/definition.yaml
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;name: &amp;#34;go&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;category: &amp;#34;dev-lang&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;version: &amp;#34;1.15.6&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;arch: &amp;#34;amd64&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;EOF&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;gogs&#34;&gt;gogs&lt;/h2&gt;
+&lt;p&gt;Finally we can write the gogs package definition!&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;mkdir gogs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The build specfile, will just fetch the &lt;code&gt;gogs&lt;/code&gt; sources at a given version (specified in the &lt;code&gt;definition.yaml&lt;/code&gt;) and build the sources with go:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt;&amp;#39;EOF&amp;#39; &amp;gt; gogs/build.yaml
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;requires:
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- category: &amp;#34;dev-lang&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;  name: &amp;#34;go&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;  version: &amp;#34;&amp;gt;=0&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;env:
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- GOPATH=&amp;#34;/go&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- GOGSPATH=&amp;#34;$GOPATH/src/github.com/gogs/gogs&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- PATH=$PATH:/usr/local/go/bin
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- CGO_ENABLED=0
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;prelude:
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- mkdir -p $GOPATH/src/github.com/gogs
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- wget https://github.com/gogs/gogs/archive/v{{.Values.version}}.tar.gz -O - | tar -xzf - -C ./  &amp;amp;&amp;amp; mv gogs-{{.Values.version}} $GOGSPATH
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;steps:
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- mkdir /usr/bin
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- cd $GOGSPATH &amp;amp;&amp;amp; go build &amp;amp;&amp;amp; mv gogs /usr/bin/gogs
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;excludes:
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;# Cache generated by Golang
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;- ^/root
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;EOF&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And the metadata, in this way we can refer to gogs in a Luet tree:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt;EOF &amp;gt; gogs/definition.yaml
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;category: &amp;#34;dev-vcs&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;name: &amp;#34;gogs&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;version: &amp;#34;0.11.91&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;EOF&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;build-packages&#34;&gt;Build packages&lt;/h1&gt;
+&lt;p&gt;The simplest and mostly immediate way to build packages, is running &lt;code&gt;luet build &amp;lt;packagename&lt;/code&gt; in the same folder you have your Luet tree.&lt;/p&gt;
+&lt;p&gt;In this case, to build gogs and its deps, we can do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;luet build dev-vcs/gogs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And that&amp;rsquo;s it! you will find the package archives in &lt;code&gt;build/&lt;/code&gt; in the same folder where you started the command.&lt;/p&gt;
+&lt;p&gt;You will see that Luet generates not only archives with the file resulting to your builds, but it will also generate metadata files (ending with &lt;code&gt;.metadata.yaml&lt;/code&gt;) that contains additional metadata information about your build and the package itself (e.g. checksums).&lt;/p&gt;
+&lt;p&gt;You can use tools like &lt;a href=&#34;https://github.com/mikefarah/yq&#34;&gt;yq&lt;/a&gt; to inspect those:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;yq r build/gogs-dev-vcs-0.11.91.metadata.yaml checksums
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
       </description>
     </item>
     

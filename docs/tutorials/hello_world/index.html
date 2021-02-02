@@ -26,13 +26,13 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/tutorials/hello_world/" />
 <meta property="article:published_time" content="2017-01-04T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-08-08T12:16:57+02:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-02-02T10:04:52+01:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Hello world!">
 <meta itemprop="description" content="Everything starts from an &#34;Hello!&#34;
 ">
 <meta itemprop="datePublished" content="2017-01-04T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2020-08-08T12:16:57+02:00" />
-<meta itemprop="wordCount" content="0">
+<meta itemprop="dateModified" content="2021-02-02T10:04:52+01:00" />
+<meta itemprop="wordCount" content="548">
 
 
 
@@ -143,7 +143,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.239e4246c2e62a9dc8f199deb8defd00.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.a7b5436013a30a92f4c0fa9241ce35ac.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -175,7 +175,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.239e4246c2e62a9dc8f199deb8defd00.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.a7b5436013a30a92f4c0fa9241ce35ac.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -558,7 +558,87 @@ if (!doNotTrack) {
 	<h1>Hello world!</h1>
     <div class="lead">Everything starts from an &ldquo;Hello!&rdquo;</div>
 	       
-	
+	<p>This article will guide you to build your first package with Luet!
+For this purpose, we have picked a real-world example: <a href="https://github.com/gogs/gogs">gogs</a> which is a &ldquo;painless self-hosted Git service&rdquo;, an open-source alternative to Github.</p>
+<p>Gogs is written in Golang, and we need a working Golang version in order to build it.</p>
+<h1 id="define-a-luet-tree">Define a Luet tree</h1>
+<p>Everything starts from a Luet tree. A Luet tree is just a directory containing one (or more) Luet specfile, here on we assume that you are working in a dedicated folder (e.g. <code>~/demo</code>) in your system.</p>
+<p>Let&rsquo;s create then a package that will be our base to build other packages from now on, we have picked <code>busybox</code> here - it is really small and enough for our purpose.</p>
+<h2 id="busybox">busybox</h2>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir busybox
+</code></pre></div><p>Let&rsquo;s now write the build specification, which is just containing the image tag that we are referencing to</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; busybox/build.yaml
+</span><span style="color:#4e9a06">image: &#34;busybox:{{.Values.version}}-glibc&#34;
+</span><span style="color:#4e9a06">EOF</span>
+</code></pre></div><p>Now, lets write the <code>definition.yaml</code>, which contains the metadata information about our package ( e.g. how we refer to it with luet, the version, and so on )</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; busybox/definition.yaml
+</span><span style="color:#4e9a06">category: &#34;distro&#34;
+</span><span style="color:#4e9a06">name: &#34;busybox&#34;
+</span><span style="color:#4e9a06">version: &#34;1.33.0&#34;
+</span><span style="color:#4e9a06">EOF</span>
+</code></pre></div><h2 id="golang">golang</h2>
+<p>We need now golang in order to build <code>gogs</code>. Let&rsquo;s declare then a golang package:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir golang
+</code></pre></div><p>And a build specfile, which is simply fetch golang from <a href="https://golang.org">https://golang.org</a> and installing it in the busybox container:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; golang/build.yaml
+</span><span style="color:#4e9a06">requires:
+</span><span style="color:#4e9a06">- category: &#34;distro&#34;
+</span><span style="color:#4e9a06">  name: &#34;busybox&#34;
+</span><span style="color:#4e9a06">  version: &#34;&gt;=0&#34;
+</span><span style="color:#4e9a06">
+</span><span style="color:#4e9a06">prelude:
+</span><span style="color:#4e9a06">- wget https://golang.org/dl/go{{.Values.version}}.linux-{{.Values.arch}}.tar.gz -O golang.tar.gz
+</span><span style="color:#4e9a06">- mkdir /usr/local
+</span><span style="color:#4e9a06">steps:
+</span><span style="color:#4e9a06">- tar -C /usr/local -xzf golang.tar.gz
+</span><span style="color:#4e9a06">EOF</span>
+</code></pre></div><p>Note how we <code>require</code> busybox. The Golang container will now be based from busybox, and the <code>prelude</code> and <code>steps</code> fields will be executed in that context.</p>
+<p>And finally let&rsquo;s write the golang metadata files, so we can refer to it from other packages</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; golang/definition.yaml
+</span><span style="color:#4e9a06">name: &#34;go&#34;
+</span><span style="color:#4e9a06">category: &#34;dev-lang&#34;
+</span><span style="color:#4e9a06">version: &#34;1.15.6&#34;
+</span><span style="color:#4e9a06">arch: &#34;amd64&#34;
+</span><span style="color:#4e9a06">EOF</span>
+</code></pre></div><h2 id="gogs">gogs</h2>
+<p>Finally we can write the gogs package definition!</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">mkdir gogs
+</code></pre></div><p>The build specfile, will just fetch the <code>gogs</code> sources at a given version (specified in the <code>definition.yaml</code>) and build the sources with go:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cat <span style="color:#4e9a06">&lt;&lt;&#39;EOF&#39; &gt; gogs/build.yaml
+</span><span style="color:#4e9a06">requires:
+</span><span style="color:#4e9a06">- category: &#34;dev-lang&#34;
+</span><span style="color:#4e9a06">  name: &#34;go&#34;
+</span><span style="color:#4e9a06">  version: &#34;&gt;=0&#34;
+</span><span style="color:#4e9a06">env:
+</span><span style="color:#4e9a06">- GOPATH=&#34;/go&#34;
+</span><span style="color:#4e9a06">- GOGSPATH=&#34;$GOPATH/src/github.com/gogs/gogs&#34;
+</span><span style="color:#4e9a06">- PATH=$PATH:/usr/local/go/bin
+</span><span style="color:#4e9a06">- CGO_ENABLED=0
+</span><span style="color:#4e9a06">prelude:
+</span><span style="color:#4e9a06">- mkdir -p $GOPATH/src/github.com/gogs
+</span><span style="color:#4e9a06">- wget https://github.com/gogs/gogs/archive/v{{.Values.version}}.tar.gz -O - | tar -xzf - -C ./  &amp;&amp; mv gogs-{{.Values.version}} $GOGSPATH
+</span><span style="color:#4e9a06">steps:
+</span><span style="color:#4e9a06">- mkdir /usr/bin
+</span><span style="color:#4e9a06">- cd $GOGSPATH &amp;&amp; go build &amp;&amp; mv gogs /usr/bin/gogs
+</span><span style="color:#4e9a06">excludes:
+</span><span style="color:#4e9a06"># Cache generated by Golang
+</span><span style="color:#4e9a06">- ^/root
+</span><span style="color:#4e9a06">EOF</span>
+</code></pre></div><p>And the metadata, in this way we can refer to gogs in a Luet tree:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cat <span style="color:#4e9a06">&lt;&lt;EOF &gt; gogs/definition.yaml
+</span><span style="color:#4e9a06">category: &#34;dev-vcs&#34;
+</span><span style="color:#4e9a06">name: &#34;gogs&#34;
+</span><span style="color:#4e9a06">version: &#34;0.11.91&#34;
+</span><span style="color:#4e9a06">EOF</span>
+</code></pre></div><h1 id="build-packages">Build packages</h1>
+<p>The simplest and mostly immediate way to build packages, is running <code>luet build &lt;packagename</code> in the same folder you have your Luet tree.</p>
+<p>In this case, to build gogs and its deps, we can do:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">luet build dev-vcs/gogs
+</code></pre></div><p>And that&rsquo;s it! you will find the package archives in <code>build/</code> in the same folder where you started the command.</p>
+<p>You will see that Luet generates not only archives with the file resulting to your builds, but it will also generate metadata files (ending with <code>.metadata.yaml</code>) that contains additional metadata information about your build and the package itself (e.g. checksums).</p>
+<p>You can use tools like <a href="https://github.com/mikefarah/yq">yq</a> to inspect those:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">yq r build/gogs-dev-vcs-0.11.91.metadata.yaml checksums
+</code></pre></div>
 	
 		<style>
   .feedback--answer {
@@ -621,7 +701,7 @@ if (!doNotTrack) {
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified August 8, 2020: <a  href="https://github.com/Luet-lab/docs/commit/f74418f98828b98fd0196c99766e6aee69062040">Update docs and redefine structure (f74418f)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified February 2, 2021: <a  href="https://github.com/Luet-lab/docs/commit/89262a58471d6335a0a7c15aec564dd94fd406b2">Update hello_world.md (89262a5)</a>
 </div>
 </div>
 
