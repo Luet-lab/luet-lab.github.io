@@ -7,6 +7,10 @@ description: >
   Example on how to build a package and run it locally with luet box
 ---
 
+{{< alert color="warning" title="Warning" >}}
+This article contains references to Luet repositories that were deprecated, and needs to be updated.
+Please refer to the ["Hello World"](../../tutorials/hello_world/) tutorial instead.
+{{< /alert >}}
 
 ![catclock](https://github.com/BarkyTheDog/catclock/raw/master/catclock.gif)
 
