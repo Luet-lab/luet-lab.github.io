@@ -163,6 +163,8 @@ $~/workdir&amp;gt; cat &lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;lt;&amp;lt
         &lt;p&gt;This article will guide you to build your first package with Luet!
 For this purpose, we have picked a real-world example: &lt;a href=&#34;https://github.com/gogs/gogs&#34;&gt;gogs&lt;/a&gt; which is a &amp;ldquo;painless self-hosted Git service&amp;rdquo;, an open-source alternative to Github.&lt;/p&gt;
 &lt;p&gt;Gogs is written in Golang, and we need a working Golang version in order to build it.&lt;/p&gt;
+&lt;p&gt;Here you can see a live recorded session of this tutorial:&lt;/p&gt;
+&lt;script id=&#34;asciicast-388348&#34; src=&#34;https://asciinema.org/a/388348.js&#34; data-autoplay=&#34;true&#34; data-size=&#34;small&#34; data-cols=&#34;120&#34; data-rows=&#34;40&#34; async&gt;&lt;/script&gt;
 &lt;h1 id=&#34;define-a-luet-tree&#34;&gt;Define a Luet tree&lt;/h1&gt;
 &lt;p&gt;Everything starts from a Luet tree. A Luet tree is just a directory containing one (or more) Luet specfile, here on we assume that you are working in a dedicated folder (e.g. &lt;code&gt;~/demo&lt;/code&gt;) in your system.&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s create then a package that will be our base to build other packages from now on, we have picked &lt;code&gt;busybox&lt;/code&gt; here - it is really small and enough for our purpose.&lt;/p&gt;
