@@ -12,6 +12,10 @@ For this purpose, we have picked a real-world example: [gogs](https://github.com
 
 Gogs is written in Golang, and we need a working Golang version in order to build it.
 
+Here you can see a live recorded session of this tutorial:
+<script id="asciicast-388348" src="https://asciinema.org/a/388348.js" data-autoplay="true" data-size="small" data-cols="120" data-rows="40" async></script>
+
+
 # Define a Luet tree
 
 Everything starts from a Luet tree. A Luet tree is just a directory containing one (or more) Luet specfile, here on we assume that you are working in a dedicated folder (e.g. `~/demo`) in your system.
