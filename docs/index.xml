@@ -1010,7 +1010,7 @@ They share the same SAT logic of expansion, allowing to swap entire version rang
 &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;    priority: 1
 &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;    type: &amp;#34;http&amp;#34;
 &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;    urls: 
-&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;    - &amp;#34;https://get.mocaccino.org/moacccino-micro-stable&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;    - &amp;#34;https://get.mocaccino.org/mocaccino-micro-stable&amp;#34;
 &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;EOF&lt;/span&gt;
 
 docker rm luet-runtime-test &lt;span style=&#34;color:#ce5c00;font-weight:bold&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color:#204a87&#34;&gt;true&lt;/span&gt;
