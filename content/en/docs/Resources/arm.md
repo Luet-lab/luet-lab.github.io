@@ -6,6 +6,10 @@ description: >
   Use Luet to build, track, and release OTA update for your embedded devices.
 ---
 
+{{< alert color="warning" title="Warning" >}}
+This article is outdated.
+Please refer to the ["Hello World"](../../tutorials/hello_world/) tutorial instead.
+{{< /alert >}}
 
 Here we show an example on how to build "burnable" SD images for Raspberry Pi with Luet. This approach lets you describe and version OTA upgrades for your embedded devices, delivering upgrades as layer upgrades on the Pi.
 
