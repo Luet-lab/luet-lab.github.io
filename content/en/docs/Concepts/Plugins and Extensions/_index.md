@@ -120,3 +120,19 @@ $ luet --plugin test-foo install -y foopackage
 ```
 
 And check `/tmp/event.txt` to see the event fired and `/tmp/payload.txt` to check the payloads that were emitted by Luet.
+
+### Concrete example
+
+A plugin that prints the images that are being built in `/tmp/exec.log`:
+
+```bash
+#!/bin/bash
+exec >> /tmp/exec.log
+exec 2>&1
+event="$1"
+payload="$2"
+if [ "$event" == "image.post.build" ]; then
+  image=$(echo "$payload" | jq -r .data | jq -r .ImageName )
+  echo "$image built"
+fi
+```
