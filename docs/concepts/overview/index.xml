@@ -40,10 +40,6 @@
 &lt;h2 id=&#34;environmental-variables&#34;&gt;Environmental variables&lt;/h2&gt;
 &lt;p&gt;Luet builds passes its environment variable at the engine which is called during build, so for example the environment variable &lt;code&gt;DOCKER_HOST&lt;/code&gt; or &lt;code&gt;DOCKER_BUILDKIT&lt;/code&gt; can be setted.&lt;/p&gt;
 &lt;p&gt;Every argument from the CLI can be setted via environment variable too with a &lt;code&gt;LUET_&lt;/code&gt; prefix, for instance the flag &lt;code&gt;--clean&lt;/code&gt;, can be setted via environment with &lt;code&gt;LUET_CLEAN&lt;/code&gt;, &lt;code&gt;--privileged&lt;/code&gt; can be enabled with &lt;code&gt;LUET_PRIVILEGED&lt;/code&gt; and so on.&lt;/p&gt;
-&lt;p&gt;Additionally, you can set:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;DOCKER_SQUASH&lt;/code&gt;: Set to &lt;code&gt;true&lt;/code&gt; to squash each image being created (Docker backend only)&lt;/li&gt;
-&lt;/ul&gt;
 &lt;h2 id=&#34;supported-compression-format&#34;&gt;Supported compression format&lt;/h2&gt;
 &lt;p&gt;At the moment, &lt;code&gt;luet&lt;/code&gt; can compress packages and tree with &lt;code&gt;zstd&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt;. For example:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;luet build --compression zstd ...
