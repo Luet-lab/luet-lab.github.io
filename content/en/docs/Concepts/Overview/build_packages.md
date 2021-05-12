@@ -44,9 +44,6 @@ Luet builds passes its environment variable at the engine which is called during
 
 Every argument from the CLI can be setted via environment variable too with a `LUET_` prefix, for instance the flag `--clean`, can be setted via environment with `LUET_CLEAN`, `--privileged` can be enabled with `LUET_PRIVILEGED` and so on.
 
-Additionally, you can set:
-- `DOCKER_SQUASH`: Set to `true` to squash each image being created (Docker backend only)
-
 ## Supported compression format
 
 At the moment, `luet` can compress packages and tree with `zstd` and `gzip`. For example: 
