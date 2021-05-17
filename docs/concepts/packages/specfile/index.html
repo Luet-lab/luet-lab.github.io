@@ -25,12 +25,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/packages/specfile/" />
-<meta property="article:modified_time" content="2021-01-08T19:07:00+01:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-05-17T18:30:30+02:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Specfile">
 <meta itemprop="description" content="Luet specfile syntax
 ">
-<meta itemprop="dateModified" content="2021-01-08T19:07:00+01:00" />
-<meta itemprop="wordCount" content="1261">
+<meta itemprop="dateModified" content="2021-05-17T18:30:30+02:00" />
+<meta itemprop="wordCount" content="1383">
 
 
 
@@ -141,7 +141,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.d3c6a2af58dc846ea85620be2f22b3e7.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.98e293643de1b045ad93133be483e190.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -173,7 +173,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.d3c6a2af58dc846ea85620be2f22b3e7.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.98e293643de1b045ad93133be483e190.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -550,7 +550,20 @@ if (!doNotTrack) {
         <li><a href="#building-strategies">Building strategies</a></li>
         <li><a href="#build-time-dependencies">Build time dependencies</a></li>
         <li><a href="#excludingincluding-files-explictly">Excluding/including files explictly</a></li>
-        <li><a href="#keywords">Keywords</a></li>
+      </ul>
+    </li>
+    <li><a href="#keywords">Keywords</a>
+      <ul>
+        <li><a href="#env"><code>env</code></a></li>
+        <li><a href="#prelude"><code>prelude</code></a></li>
+        <li><a href="#step"><code>step</code></a></li>
+        <li><a href="#unpack"><code>unpack</code></a></li>
+        <li><a href="#package_dir"><code>package_dir</code></a></li>
+        <li><a href="#includes"><code>includes</code></a></li>
+        <li><a href="#excludes"><code>excludes</code></a></li>
+        <li><a href="#image"><code>image</code></a></li>
+        <li><a href="#requires"><code>requires</code></a></li>
+        <li><a href="#conflicts"><code>conflicts</code></a></li>
       </ul>
     </li>
     <li><a href="#rutime-specs">Rutime specs</a>
@@ -581,8 +594,8 @@ if (!doNotTrack) {
     <div class="lead">Luet specfile syntax</div>
 	       
 	<h1 id="specfiles">Specfiles</h1>
-<p>Luet <a href="/docs/docs/concepts/packages/">packages</a> are defined by specfiles. Specfiles define the runtime and builtime requirements of a package.  There is an hard distinction between runtime and buildtime. A spec is composed at least by the runtime (<code>definition.yaml</code>) and the buildtime specification (<code>build.yaml</code>).</p>
-<p>Luet identifies the package definition by looking at directories that contains a <code>build.yaml</code> and a <code>definition.yaml</code> files. A Luet tree is merely a composition of directories that follows this convention. There is no constriction on either folder naming or hierarchy.</p>
+<p>Luet <a href="/docs/docs/concepts/packages/">packages</a> are defined by specfiles. Specfiles define the runtime and builtime requirements of a package.  There is an hard distinction between runtime and buildtime. A spec is composed at least by the runtime (<code>definition.yaml</code> or a <code>collection.yaml</code>) and the buildtime specification (<code>build.yaml</code>).</p>
+<p>Luet identifies the package definition by looking at directories that contains a <code>build.yaml</code> and a <code>definition.yaml</code> (or <code>collection.yaml</code>) files. A Luet tree is merely a composition of directories that follows this convention. There is no constriction on either folder naming or hierarchy.</p>
 <p><em>Example of a <a href="https://github.com/Luet-lab/luet-embedded/tree/master/distro">tree folder hierarchy</a></em></p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">tree distro                                                      
 distro
@@ -680,30 +693,57 @@ The directory must represent exactly how the files will be ultimately installed 
 <h3 id="excludingincluding-files-explictly">Excluding/including files explictly</h3>
 <p>Luet can also <em>exclude</em> and <em>include</em> single files or folders from a package by using the <code>excludes</code> and <code>includes</code> keyword respecitvely.</p>
 <p>Both of them are parsed as a list of Golang regex expressions, and they can be combined together to fine-grainly decide which files should be inside the final artifact. You can refer to the files as they were in the resulting package. So if a package produces a <code>/foo</code> file,  and you want to exclude it, you can add it to <code>excludes</code> as <code>/foo</code>.</p>
-<h3 id="keywords">Keywords</h3>
-<p>Global:</p>
-<ul>
-<li><code>env</code>: List of environment variables ( in <code>NAME=value</code> format ) that are expanded in <code>step</code> and in <code>prelude</code>. ( e.g. <code>${NAME}</code> ).</li>
-<li><code>step</code>: List of commands to perform in the build container.</li>
-<li><code>prelude</code>: List of commands to perform in the build container before building.</li>
-<li><code>unpack</code>: Boolean which indicates if the package content <strong>is</strong> the whole container content.</li>
-<li><code>includes</code>: List of strings which are encoded in logical AND, they denote the content to filter from the container image to be packed. Wildcards and golang regular expressions are supported. If specified, files not matching any of the regular expressions in the list won&rsquo;t be included in the final package.</li>
-<li><code>package_dir</code>: Directory from within the build container which contains the final artefacts of your package</li>
-<li><code>excludes</code>: List of golang regexes. They are in full path form (e.g. <code>^/usr/bin/foo</code> ) and indicates that the files listed shouldn&rsquo;t be part of the final artifact</li>
-<li><code>includes</code>: List of golang regexes. They are in full path form (e.g. <code>^/usr/bin/foo</code> ) and indicates that the files listed needs to be included as part of the final artifact</li>
-</ul>
-<p>By combining <code>excludes</code> with <code>includes</code>, it&rsquo;s possible to include certain files while excluding explicitly some others (<code>excludes</code> takes precedence over <code>includes</code>).</p>
-<p>Source from external image (e.g. Docker):</p>
-<ul>
-<li><code>image</code>: docker image to be used to build the package (might be omitted)</li>
-</ul>
-<p>From a tree dependency:</p>
-<ul>
-<li><code>requires</code>: List of packages which it depends on.</li>
-<li><code>conflicts</code>: List of packages which it conflicts with.</li>
-</ul>
+<h2 id="keywords">Keywords</h2>
+<p>Here is a list of the full keyword refereces for the <code>build.yaml</code> file.</p>
+<h3 id="env"><code>env</code></h3>
+<p>(optional) A list of environment variables ( in <code>NAME=value</code> format ) that are expanded in <code>step</code> and in <code>prelude</code>. ( e.g. <code>${NAME}</code> ).</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">env</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">PATH=$PATH:/usr/local/go/bin</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">GOPATH=/luetbuild/go</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">GO111MODULE=on</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">CGO_ENABLED=0</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">LDFLAGS=&#34;-s -w&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><h3 id="prelude"><code>prelude</code></h3>
+<p>(optional) A list of commands to perform in the build container before building.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">prelude</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000;font-weight:bold">|</span><span style="color:#8f5902;font-style:italic">
+</span><span style="color:#8f5902;font-style:italic">   PACKAGE_VERSION=${PACKAGE_VERSION%\+*} &amp;&amp; \
+</span><span style="color:#8f5902;font-style:italic">   git clone https://github.com/mudler/yip &amp;&amp; cd yip &amp;&amp; git checkout &#34;${PACKAGE_VERSION}&#34; -b build</span><span style="color:#f8f8f8;text-decoration:underline">   
+</span></code></pre></div><h3 id="step"><code>step</code></h3>
+<p>(optional) List of commands to perform in the build container.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">steps</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000;font-weight:bold">|</span><span style="color:#8f5902;font-style:italic">
+</span><span style="color:#8f5902;font-style:italic">   </span><span style="color:#f8f8f8;text-decoration:underline">   </span><span style="color:#000">cd yip &amp;&amp; make build-small &amp;&amp; mv yip /usr/bin/yip</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><h3 id="unpack"><code>unpack</code></h3>
+<p>(optional) Boolean flag. It indicates to use the unpacking strategy while building a package</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">unpack</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">true</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><p>It indicates that the package content <strong>is</strong> the whole container content.</p>
+<h3 id="package_dir"><code>package_dir</code></h3>
+<p>(optional) A path relative to the build container where to create the package from.</p>
+<p>Similarly to <code>unpack</code>, changes the building strategy.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">steps</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">mkdir -p /foo/bar/etc/myapp</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">touch /foo/bar/etc/myapp/config</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">package_dir</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">/foo/bar</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><h3 id="includes"><code>includes</code></h3>
+<p>(optional)  List of regular expressions to match files in the resulting package. The path is absolute as it would refer directly to the artifact content.</p>
+<p>Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">includes</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/yip</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><h3 id="excludes"><code>excludes</code></h3>
+<p>(optional) List of golang regexes. They are in full path form (e.g. <code>^/usr/bin/foo</code> ) and indicates that the files listed shouldn&rsquo;t be part of the final artifact</p>
+<p>Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">includes</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/yip</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><p>By combining <code>excludes</code> with <code>includes</code>, it&rsquo;s possible to include certain files while excluding explicitly some others (<code>excludes</code> takes precedence over <code>includes</code>).</p>
+<h3 id="image"><code>image</code></h3>
+<p>Docker image to be used to build the package (might be omitted in place of <code>requires</code>)</p>
+<h3 id="requires"><code>requires</code></h3>
+<p>List of packages which it depends on.</p>
+<h3 id="conflicts"><code>conflicts</code></h3>
+<p>(optional) List of packages which it conflicts with.</p>
 <h2 id="rutime-specs">Rutime specs</h2>
-<p>Runtime specification are denoted in a <code>definition.yaml</code> sibiling file. It identifies the package and the runtime contraints attached to it.</p>
+<p>Runtime specification are denoted in a <code>definition.yaml</code> or a <code>collection.yaml</code> sibiling file. It identifies the package and the runtime contraints attached to it.</p>
 <p><em>definition.yaml</em>:</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;awesome&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;0.1&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
@@ -718,7 +758,38 @@ The directory must represent exactly how the files will be ultimately installed 
 </span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">provides</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;&lt;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><p>A <code>collection.yaml</code> can be used in place of a <code>definition.yaml</code> to identify a <strong>set</strong> of packages that instead shares a common <code>build.yaml</code>:</p>
+<p><em>collection.yaml</em>:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">packages</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;awesome&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;0.1&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;foo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">requires</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;echo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;&gt;=1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">conflicts</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;foo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">provides</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;&lt;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;awesome&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;0.2&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;foo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">requires</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;echo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;&gt;=1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">conflicts</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;foo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">provides</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;&lt;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">...</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></code></pre></div><h3 id="keywords-1">Keywords</h3>
+<p>Here is a list of the full keyword refereces</p>
 <p>Global:</p>
 <ul>
 <li><code>name</code>: Name of the package <strong>required</strong></li>
@@ -812,7 +883,7 @@ The directory must represent exactly how the files will be ultimately installed 
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified January 8, 2021: <a  href="https://github.com/Luet-lab/docs/commit/86cf4228e9e7d32887149984cc103b1ed659aaff">Update specfile.md (86cf422)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified May 17, 2021: <a  href="https://github.com/Luet-lab/docs/commit/66a2260114f261322f1d2652bd0eb356a65f8f70">Update build keyword docs (66a2260)</a>
 </div>
 </div>
 
