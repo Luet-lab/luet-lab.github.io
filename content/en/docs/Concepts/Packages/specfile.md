@@ -6,11 +6,12 @@ description: >
   Luet specfile syntax
 ---
 
+
 # Specfiles
 
-Luet [packages](/docs/docs/concepts/packages/) are defined by specfiles. Specfiles define the runtime and builtime requirements of a package.  There is an hard distinction between runtime and buildtime. A spec is composed at least by the runtime (`definition.yaml`) and the buildtime specification (`build.yaml`).
+Luet [packages](/docs/docs/concepts/packages/) are defined by specfiles. Specfiles define the runtime and builtime requirements of a package.  There is an hard distinction between runtime and buildtime. A spec is composed at least by the runtime (`definition.yaml` or a `collection.yaml`) and the buildtime specification (`build.yaml`).
 
-Luet identifies the package definition by looking at directories that contains a `build.yaml` and a `definition.yaml` files. A Luet tree is merely a composition of directories that follows this convention. There is no constriction on either folder naming or hierarchy.
+Luet identifies the package definition by looking at directories that contains a `build.yaml` and a `definition.yaml` (or `collection.yaml`) files. A Luet tree is merely a composition of directories that follows this convention. There is no constriction on either folder naming or hierarchy.
 
 *Example of a [tree folder hierarchy](https://github.com/Luet-lab/luet-embedded/tree/master/distro)*
 ```bash
@@ -139,32 +140,108 @@ Luet can also *exclude* and *include* single files or folders from a package by 
 
 Both of them are parsed as a list of Golang regex expressions, and they can be combined together to fine-grainly decide which files should be inside the final artifact. You can refer to the files as they were in the resulting package. So if a package produces a `/foo` file,  and you want to exclude it, you can add it to `excludes` as `/foo`.
 
-### Keywords
+## Keywords
 
-Global:
+Here is a list of the full keyword refereces for the `build.yaml` file.
 
-- `env`: List of environment variables ( in `NAME=value` format ) that are expanded in `step` and in `prelude`. ( e.g. `${NAME}` ).
-- `step`: List of commands to perform in the build container.
-- `prelude`: List of commands to perform in the build container before building.
-- `unpack`: Boolean which indicates if the package content **is** the whole container content.
-- `includes`: List of strings which are encoded in logical AND, they denote the content to filter from the container image to be packed. Wildcards and golang regular expressions are supported. If specified, files not matching any of the regular expressions in the list won't be included in the final package.
-- `package_dir`: Directory from within the build container which contains the final artefacts of your package
-- `excludes`: List of golang regexes. They are in full path form (e.g. `^/usr/bin/foo` ) and indicates that the files listed shouldn't be part of the final artifact
-- `includes`: List of golang regexes. They are in full path form (e.g. `^/usr/bin/foo` ) and indicates that the files listed needs to be included as part of the final artifact
+### `env`
+
+(optional) A list of environment variables ( in `NAME=value` format ) that are expanded in `step` and in `prelude`. ( e.g. `${NAME}` ).
+
+```yaml
+env:
+- PATH=$PATH:/usr/local/go/bin
+- GOPATH=/luetbuild/go
+- GO111MODULE=on
+- CGO_ENABLED=0
+- LDFLAGS="-s -w"
+```
+
+### `prelude`
+
+(optional) A list of commands to perform in the build container before building.
+
+```yaml
+prelude:
+- |
+   PACKAGE_VERSION=${PACKAGE_VERSION%\+*} && \
+   git clone https://github.com/mudler/yip && cd yip && git checkout "${PACKAGE_VERSION}" -b build
+```
+
+### `step`
+
+(optional) List of commands to perform in the build container.
+
+```yaml
+steps:
+- |
+   cd yip && make build-small && mv yip /usr/bin/yip
+```
+
+### `unpack`
+
+(optional) Boolean flag. It indicates to use the unpacking strategy while building a package
+
+```yaml
+unpack: true
+```
+
+It indicates that the package content **is** the whole container content.
+
+
+### `package_dir`
+
+(optional) A path relative to the build container where to create the package from.
+
+Similarly to `unpack`, changes the building strategy.
+
+
+```yaml
+steps:
+- mkdir -p /foo/bar/etc/myapp
+- touch /foo/bar/etc/myapp/config
+package_dir: /foo/bar
+```
+
+### `includes`
+
+(optional)  List of regular expressions to match files in the resulting package. The path is absolute as it would refer directly to the artifact content.
+
+Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.
+
+```yaml
+includes:
+- /usr/bin/yip
+```
+
+### `excludes`
+
+(optional) List of golang regexes. They are in full path form (e.g. `^/usr/bin/foo` ) and indicates that the files listed shouldn't be part of the final artifact
+
+Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.
+
+```yaml
+includes:
+- /usr/bin/yip
+```
 
 By combining `excludes` with `includes`, it's possible to include certain files while excluding explicitly some others (`excludes` takes precedence over `includes`).
 
-Source from external image (e.g. Docker):
-- `image`: docker image to be used to build the package (might be omitted)
+### `image`
 
-From a tree dependency:
+Docker image to be used to build the package (might be omitted in place of `requires`)
 
-- `requires`: List of packages which it depends on.
-- `conflicts`: List of packages which it conflicts with.
+### `requires`
+
+List of packages which it depends on.
+
+### `conflicts`
+
+(optional) List of packages which it conflicts with.
 
 ## Rutime specs
 
-Runtime specification are denoted in a `definition.yaml` sibiling file. It identifies the package and the runtime contraints attached to it.
+Runtime specification are denoted in a `definition.yaml` or a `collection.yaml` sibiling file. It identifies the package and the runtime contraints attached to it.
 
 *definition.yaml*:
 ```yaml
@@ -183,7 +260,43 @@ provides:
   version: "<1.0"
 ```
 
+A `collection.yaml` can be used in place of a `definition.yaml` to identify a **set** of packages that instead shares a common `build.yaml`:
+
+*collection.yaml*:
+```yaml
+packages:
+- name: "awesome"
+  version: "0.1"
+  category: "foo"
+  requires:
+  - name: "echo"
+    version: ">=1.0"
+    category: "bar"
+  conflicts:
+  - name: "foo"
+    version: "1.0"
+  provides:
+  - name: "bar"
+    version: "<1.0"
+- name: "awesome"
+  version: "0.2"
+  category: "foo"
+  requires:
+  - name: "echo"
+    version: ">=1.0"
+    category: "bar"
+  conflicts:
+  - name: "foo"
+    version: "1.0"
+  provides:
+  - name: "bar"
+    version: "<1.0"
+...
+```
+
 ### Keywords
+
+Here is a list of the full keyword refereces
 
 Global:
 
