@@ -88,6 +88,16 @@ You can write a plugin in any programming language or script.
 
 The first argument that is passed to a plugin will always be the event that was emitted by Luet in its lifecycle. You can see all the [events available here](https://github.com/mudler/luet/blob/master/pkg/bus/events.go). The second argument, is a `JSON` encoded payload of the object that Luet is emitting with the event. The object(s) may vary depending on the emitted event.
 
+The output of the plugin (`stdout`) will be parsed as JSON. Every plugin must return a valid JSON at the end of its execution, or it will be marked as failed and stops `luet` further execution. [See also the go-pluggable README](https://github.com/mudler/go-pluggable#plugin-processed-data).
+
+The returning payload should be in the following form:
+
+```json
+{ "state": "", "data": "data", "error": ""}
+```
+
+By returning a json with the error field not empty, it will make fail the overall execution.
+
 
 #### Example Plugin
 
@@ -95,6 +105,8 @@ The first argument that is passed to a plugin will always be the event that was 
 #!/bin/bash
 echo "$1" >> /tmp/event.txt
 echo "$2" >> /tmp/payload.txt
+
+echo "{}"
 
 ```
 ### Using a plugin
@@ -133,6 +145,9 @@ event="$1"
 payload="$2"
 if [ "$event" == "image.post.build" ]; then
   image=$(echo "$payload" | jq -r .data | jq -r .ImageName )
-  echo "$image built"
+    echo "{ \"data\": \"$image built\" }"
+else
+    echo "{}"
 fi
+
 ```
