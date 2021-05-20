@@ -203,6 +203,46 @@ steps:
 package_dir: /foo/bar
 ```
 
+
+### `copy`
+
+_since luet>=0.15.0_
+
+(optional) A list of packages/images where to copy files from. It is the [Docker multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/) equivalent but enhanced with tree hashing resolution.
+
+To copy a specific file from a package *build* container:
+
+```yaml
+steps:
+- ...
+prelude:
+- ...
+copy:
+- package: 
+    category: "foo"
+    name: "bar"
+    version: ">=0"
+  source: "/foo"
+  destination: "/bar"
+```
+
+Any package that is listed in the section will be compiled beforeahead the package, and the file is available both in `prelude` and `steps`.
+
+Internally, it's rendered as `COPY --from=package/image:sha /foo /bar`
+
+To copy a specific file from an external image:
+
+```yaml
+steps:
+- ...
+prelude:
+- ...
+copy:
+- image: "buxybox:latest"
+  source: "/foo"
+  destination: "/bar"
+```
+
 ### `includes`
 
 (optional)  List of regular expressions to match files in the resulting package. The path is absolute as it would refer directly to the artifact content.
@@ -229,15 +269,50 @@ By combining `excludes` with `includes`, it's possible to include certain files 
 
 ### `image`
 
-Docker image to be used to build the package (might be omitted in place of `requires`)
+(optional/required) Docker image to be used to build the package (might be omitted in place of `requires`).
+
+```yaml
+image: "busybox"
+```
+
+It indicates the image used to build the package. The image will be pulled and used to build the package.
+
 
 ### `requires`
 
-List of packages which it depends on.
+(optional/required) List of packages which it depends on.
+
+A list of packages that the current package depends on in *build time*. It might be omitted in place of `image`, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package
+
+```yaml
+requires:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
+```
+
+See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
 
 ### `conflicts`
 
-(optional) List of packages which it conflicts with.
+(optional) List of packages which it conflicts with in *build time*. In the same form of `requires` it is a list of packages that the current one is conflicting with.
+
+```yaml
+conflicts:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
+```
+
+See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
 
 ## Rutime specs
 
@@ -294,22 +369,149 @@ packages:
 ...
 ```
 
+All the fields (also the ones which are not part of the spec) in the `definition.yaml` file are available as templating values when rendering the `build.yaml` file. When running [finalizers](/docs/docs/concepts/packages/specfile/#finalizers) instead only the fields belonging to the specs are available.
+
 ### Keywords
 
 Here is a list of the full keyword refereces
 
-Global:
+#### `name`
 
-- `name`: Name of the package **required**
-- `version`: Version of the package in semver notation. Selectors (`>=`,`<`,`>`,`<=`) here are not supported. You can use selectors only in dependency lists.
-- `category`: Category of the package.
-- `provides`: List of packages which it replaces.
-- `hidden`: Boolean that indicates that the package should be hidden from `luet search`. Note packages can be still installed, they are just omitted to the user. You can inspect any time hidden packages with `luet search --hidden`
+(required) A string containing the name of the package
 
-Runtime dependency list:
+```yaml
+name: "foo"
+```
 
-- `requires`: List of packages which it depends on, in runtime.
-- `conflicts`: List of packages which it conflicts with, in runtime.
+#### `version`
+
+(required) A string containing the version of the package
+
+```yaml
+version: "1.0"
+```
+
+#### `category`
+
+(optional) A string containing the category of the package
+
+```yaml
+category: "system"
+```
+
+### `provides`
+
+(optional) List of packages which the current package is providing.
+
+```yaml
+conflicts:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
+```
+
+See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
+
+### `hidden`
+
+(optional) A boolean indicating whether the package has to be shown or not in the search results (`luet search...`)
+
+```yaml
+hidden: true
+```
+
+### `requires`
+
+(optional) List of packages which it depends on in runtime.
+
+A list of packages that the current package depends on in *runtime*. It might be omitted in place of `image`, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package
+
+```yaml
+requires:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
+```
+
+See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
+
+### `conflicts`
+
+(optional) List of packages which it conflicts with in *runtime*. In the same form of `requires` it is a list of packages that the current one is conflicting with.
+
+```yaml
+conflicts:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
+```
+
+See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
+
+### `annotations`
+
+(optional) A map of freeform package annotations:
+
+```yaml
+annotations:
+  foo: "bar"
+  baz: "test"
+```
+
+### `labels`
+
+(optional) A map of freeform package labels:
+
+```yaml
+labels:
+  foo: "bar"
+  baz: "test"
+```
+
+Labels can be used in `luet search` to find packages by labels, e.g.:
+
+```bash
+$> luet search --by-label foo
+```
+
+### `description`
+
+(optional) A string indicating the package description
+
+```yaml
+name: "foo"
+description: "foo is capable of..."
+```
+
+### `uri`
+
+(optional) A list of URI relative to the package ( e.g. the official project pages, wikis, README, etc )
+
+```yaml
+uri:
+- "http://www.mocaccino.org"
+- ...
+```
+
+### `license`
+
+(optional) A string indicating the package license type.
+
+```yaml
+license: "GPL-3"
+```
 
 ## Refering to packages from the CLI
 
