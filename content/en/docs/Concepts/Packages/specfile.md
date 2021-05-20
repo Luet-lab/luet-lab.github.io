@@ -251,7 +251,15 @@ Wildcards and golang regular expressions are supported. If specified, files whic
 
 ```yaml
 includes:
-- /usr/bin/yip
+- /etc$
+- /etc/lvm$
+- /etc/lvm/.*
+- /usr$
+- /usr/bin$
+- /usr/bin/cc.*
+- /usr/bin/c\+\+.*
+- /usr/bin/cpp.*
+- /usr/bin/g\+\+.*
 ```
 
 ### `excludes`
@@ -261,8 +269,10 @@ includes:
 Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.
 
 ```yaml
-includes:
-- /usr/bin/yip
+excludes:
+- ^/etc/shadow
+- ^/etc/os-release
+- ^/etc/gshadow
 ```
 
 By combining `excludes` with `includes`, it's possible to include certain files while excluding explicitly some others (`excludes` takes precedence over `includes`).
