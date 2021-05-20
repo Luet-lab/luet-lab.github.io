@@ -136,7 +136,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.bf2bdedd66a6304b6bd21e04c817d952.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.24115053e5e0c5a48643fa21d1b0f00a.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -168,7 +168,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.bf2bdedd66a6304b6bd21e04c817d952.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.24115053e5e0c5a48643fa21d1b0f00a.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -614,10 +614,16 @@ Extension <span style="color:#204a87">help</span>
 <h3 id="writing-a-plugin">Writing a Plugin</h3>
 <p>You can write a plugin in any programming language or script.</p>
 <p>The first argument that is passed to a plugin will always be the event that was emitted by Luet in its lifecycle. You can see all the <a href="https://github.com/mudler/luet/blob/master/pkg/bus/events.go">events available here</a>. The second argument, is a <code>JSON</code> encoded payload of the object that Luet is emitting with the event. The object(s) may vary depending on the emitted event.</p>
+<p>The output of the plugin (<code>stdout</code>) will be parsed as JSON. Every plugin must return a valid JSON at the end of its execution, or it will be marked as failed and stops <code>luet</code> further execution. <a href="https://github.com/mudler/go-pluggable#plugin-processed-data">See also the go-pluggable README</a>.</p>
+<p>The returning payload should be in the following form:</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#000;font-weight:bold">{</span> <span style="color:#204a87;font-weight:bold">&#34;state&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#34;data&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;data&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">&#34;error&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;&#34;</span><span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><p>By returning a json with the error field not empty, it will make fail the overall execution.</p>
 <h4 id="example-plugin">Example Plugin</h4>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#8f5902;font-style:italic">#!/bin/bash
 </span><span style="color:#8f5902;font-style:italic"></span><span style="color:#204a87">echo</span> <span style="color:#4e9a06">&#34;</span><span style="color:#000">$1</span><span style="color:#4e9a06">&#34;</span> &gt;&gt; /tmp/event.txt
 <span style="color:#204a87">echo</span> <span style="color:#4e9a06">&#34;</span><span style="color:#000">$2</span><span style="color:#4e9a06">&#34;</span> &gt;&gt; /tmp/payload.txt
+
+<span style="color:#204a87">echo</span> <span style="color:#4e9a06">&#34;{}&#34;</span>
 
 </code></pre></div><h3 id="using-a-plugin">Using a plugin</h3>
 <p>To use the above plugin, simply make it executable:</p>
@@ -638,8 +644,11 @@ $ luet --plugin test-foo install -y foopackage
 <span style="color:#000">payload</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;</span><span style="color:#000">$2</span><span style="color:#4e9a06">&#34;</span>
 <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#ce5c00;font-weight:bold">[</span> <span style="color:#4e9a06">&#34;</span><span style="color:#000">$event</span><span style="color:#4e9a06">&#34;</span> <span style="color:#ce5c00;font-weight:bold">==</span> <span style="color:#4e9a06">&#34;image.post.build&#34;</span> <span style="color:#ce5c00;font-weight:bold">]</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#204a87;font-weight:bold">then</span>
   <span style="color:#000">image</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87;font-weight:bold">$(</span><span style="color:#204a87">echo</span> <span style="color:#4e9a06">&#34;</span><span style="color:#000">$payload</span><span style="color:#4e9a06">&#34;</span> <span style="color:#000;font-weight:bold">|</span> jq -r .data <span style="color:#000;font-weight:bold">|</span> jq -r .ImageName <span style="color:#204a87;font-weight:bold">)</span>
-  <span style="color:#204a87">echo</span> <span style="color:#4e9a06">&#34;</span><span style="color:#000">$image</span><span style="color:#4e9a06"> built&#34;</span>
+    <span style="color:#204a87">echo</span> <span style="color:#4e9a06">&#34;{ \&#34;data\&#34;: \&#34;</span><span style="color:#000">$image</span><span style="color:#4e9a06"> built\&#34; }&#34;</span>
+<span style="color:#204a87;font-weight:bold">else</span>
+    <span style="color:#204a87">echo</span> <span style="color:#4e9a06">&#34;{}&#34;</span>
 <span style="color:#204a87;font-weight:bold">fi</span>
+
 </code></pre></div>
         <div class="section-index">
     
@@ -756,7 +765,7 @@ $ luet --plugin test-foo install -y foopackage
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified April 20, 2021: <a  href="https://github.com/Luet-lab/docs/commit/e46ed292bd5a6a33b6fdc9fdea3c474ae7fba59f">Add plugin example (e46ed29)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified May 20, 2021: <a  href="https://github.com/Luet-lab/docs/commit/ff7a265f772a1fe0c7369b70b590aa29308c4e66">Fixup plugin docs (ff7a265)</a>
 </div>
 </div>
 
