@@ -25,12 +25,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/packages/specfile/" />
-<meta property="article:modified_time" content="2021-05-20T11:26:43+02:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-05-20T11:30:05+02:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Specfile">
 <meta itemprop="description" content="Luet specfile syntax
 ">
-<meta itemprop="dateModified" content="2021-05-20T11:26:43+02:00" />
-<meta itemprop="wordCount" content="1812">
+<meta itemprop="dateModified" content="2021-05-20T11:30:05+02:00" />
+<meta itemprop="wordCount" content="1822">
 
 
 
@@ -141,7 +141,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.590dc56e4ae3653374ceb91962440d19.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.bf2bdedd66a6304b6bd21e04c817d952.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -173,7 +173,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.590dc56e4ae3653374ceb91962440d19.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.bf2bdedd66a6304b6bd21e04c817d952.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -765,12 +765,22 @@ The directory must represent exactly how the files will be ultimately installed 
 <p>(optional)  List of regular expressions to match files in the resulting package. The path is absolute as it would refer directly to the artifact content.</p>
 <p>Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">includes</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
-</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/yip</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/etc$</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/etc/lvm$</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/etc/lvm/.*</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr$</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin$</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/cc.*</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/c\+\+.*</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/cpp.*</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/g\+\+.*</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></code></pre></div><h3 id="excludes"><code>excludes</code></h3>
 <p>(optional) List of golang regexes. They are in full path form (e.g. <code>^/usr/bin/foo</code> ) and indicates that the files listed shouldn&rsquo;t be part of the final artifact</p>
 <p>Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.</p>
-<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">includes</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
-</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/yip</span><span style="color:#f8f8f8;text-decoration:underline">
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">excludes</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">^/etc/shadow</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">^/etc/os-release</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">^/etc/gshadow</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></code></pre></div><p>By combining <code>excludes</code> with <code>includes</code>, it&rsquo;s possible to include certain files while excluding explicitly some others (<code>excludes</code> takes precedence over <code>includes</code>).</p>
 <h3 id="image"><code>image</code></h3>
 <p>(optional/required) Docker image to be used to build the package (might be omitted in place of <code>requires</code>).</p>
@@ -998,7 +1008,7 @@ The directory must represent exactly how the files will be ultimately installed 
 		<br />
 	
 	
-	<div class="text-muted mt-5 pt-3 border-top">Last modified May 20, 2021: <a  href="https://github.com/Luet-lab/docs/commit/a0d15bc7cb0bfe09ee1d8f7e699ff5d019f5c889">Add copy docs, update available keywords (a0d15bc)</a>
+	<div class="text-muted mt-5 pt-3 border-top">Last modified May 20, 2021: <a  href="https://github.com/Luet-lab/docs/commit/bdd6235426a8e9080eb670153234b8cd0fd8828f">More concrete examples for includes/excludes (bdd6235)</a>
 </div>
 </div>
 
