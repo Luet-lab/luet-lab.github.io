@@ -302,6 +302,10 @@ join:
 
 See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
 
+#### Examples
+
+- https://github.com/mocaccinoOS/mocaccino-stage3/blob/278e3637cf65761bf01a22c891135e237e4717ad/packages/system/stage3/build.yaml
+
 ### `package_dir`
 
 (optional) A path relative to the build container where to create the package from.
