@@ -226,6 +226,10 @@ The above keywords cannot be present in the same spec &lt;strong&gt;at the same 
 &lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;  &lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;category&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;bar&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;  &lt;/span&gt;&lt;span style=&#34;color:#204a87;font-weight:bold&#34;&gt;version&lt;/span&gt;&lt;span style=&#34;color:#000;font-weight:bold&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#4e9a06&#34;&gt;&amp;#34;1.0&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f8f8f8;text-decoration:underline&#34;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;See &lt;a href=&#34;https://luet-lab.github.io/docs/docs/docs/concepts/packages&#34;&gt;Package concepts&lt;/a&gt; for more information on how to represent a package in a Luet tree.&lt;/p&gt;
+&lt;h4 id=&#34;examples&#34;&gt;Examples&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mocaccinoOS/mocaccino-stage3/blob/278e3637cf65761bf01a22c891135e237e4717ad/packages/system/stage3/build.yaml&#34;&gt;https://github.com/mocaccinoOS/mocaccino-stage3/blob/278e3637cf65761bf01a22c891135e237e4717ad/packages/system/stage3/build.yaml&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id=&#34;package_dir&#34;&gt;&lt;code&gt;package_dir&lt;/code&gt;&lt;/h3&gt;
 &lt;p&gt;(optional) A path relative to the build container where to create the package from.&lt;/p&gt;
 &lt;p&gt;Similarly to &lt;code&gt;unpack&lt;/code&gt;, changes the building strategy.&lt;/p&gt;
