@@ -140,69 +140,48 @@ Luet can also *exclude* and *include* single files or folders from a package by 
 
 Both of them are parsed as a list of Golang regex expressions, and they can be combined together to fine-grainly decide which files should be inside the final artifact. You can refer to the files as they were in the resulting package. So if a package produces a `/foo` file,  and you want to exclude it, you can add it to `excludes` as `/foo`.
 
+### Package source image
+
+Luet needs an image to kick-off the build process for each package. This image is being used to run the commands in the `steps` and `prelude`, and then the image is processed by the **building strategies** explained above. 
+
+The image can be resolved either by: 
+
+1) providing a specific image name with `image` 
+2) providing a set of package requirements with `requires` which will be constructed a new image from 
+3) providing a set of packages to join their result from with `join`. 
+
+{{< alert color="info" title="Note" >}}
+The above keywords cannot be present in the same spec **at the same time**, or they cannot be combined. But you are free to create further intermediate specs to achieve the desired image.
+{{< /alert >}}
+
+#### Difference between `join` and `requires`
+
+While `join` and `requires` may look similar, they do a completely different job. 
+
+`requires` generates a graph from all the `images` of the specfile referenced inside the list. This means it builds a chain of images that are used to build the packages, e.g.: `packageA(image: busybox) -> packageB (requires: A) -> packageC (requires: C)`.
+
+`join` instead builds an artifact for each of the packages listed from their compilation specs and it will later *join* them together in a new container image which is then used later in the build process to create an artifact.
+
 ## Keywords
 
 Here is a list of the full keyword refereces for the `build.yaml` file.
 
-### `env`
+### `conflicts`
 
-(optional) A list of environment variables ( in `NAME=value` format ) that are expanded in `step` and in `prelude`. ( e.g. `${NAME}` ).
-
-```yaml
-env:
-- PATH=$PATH:/usr/local/go/bin
-- GOPATH=/luetbuild/go
-- GO111MODULE=on
-- CGO_ENABLED=0
-- LDFLAGS="-s -w"
-```
-
-### `prelude`
-
-(optional) A list of commands to perform in the build container before building.
+(optional) List of packages which it conflicts with in *build time*. In the same form of `requires` it is a list of packages that the current one is conflicting with.
 
 ```yaml
-prelude:
-- |
-   PACKAGE_VERSION=${PACKAGE_VERSION%\+*} && \
-   git clone https://github.com/mudler/yip && cd yip && git checkout "${PACKAGE_VERSION}" -b build
+conflicts:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
 ```
 
-### `step`
-
-(optional) List of commands to perform in the build container.
-
-```yaml
-steps:
-- |
-   cd yip && make build-small && mv yip /usr/bin/yip
-```
-
-### `unpack`
-
-(optional) Boolean flag. It indicates to use the unpacking strategy while building a package
-
-```yaml
-unpack: true
-```
-
-It indicates that the package content **is** the whole container content.
-
-
-### `package_dir`
-
-(optional) A path relative to the build container where to create the package from.
-
-Similarly to `unpack`, changes the building strategy.
-
-
-```yaml
-steps:
-- mkdir -p /foo/bar/etc/myapp
-- touch /foo/bar/etc/myapp/config
-package_dir: /foo/bar
-```
-
+See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
 
 ### `copy`
 
@@ -243,6 +222,45 @@ copy:
   destination: "/bar"
 ```
 
+### `env`
+
+(optional) A list of environment variables ( in `NAME=value` format ) that are expanded in `step` and in `prelude`. ( e.g. `${NAME}` ).
+
+```yaml
+env:
+- PATH=$PATH:/usr/local/go/bin
+- GOPATH=/luetbuild/go
+- GO111MODULE=on
+- CGO_ENABLED=0
+- LDFLAGS="-s -w"
+```
+
+### `excludes`
+
+(optional) List of golang regexes. They are in full path form (e.g. `^/usr/bin/foo` ) and indicates that the files listed shouldn't be part of the final artifact
+
+Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.
+
+```yaml
+excludes:
+- ^/etc/shadow
+- ^/etc/os-release
+- ^/etc/gshadow
+```
+
+By combining `excludes` with `includes`, it's possible to include certain files while excluding explicitly some others (`excludes` takes precedence over `includes`).
+
+
+### `image`
+
+(optional/required) Docker image to be used to build the package.
+
+```yaml
+image: "busybox"
+```
+
+It might be omitted in place of `join` or `requires`, and indicates the image used to build the package. The image will be pulled and used to build the package.
+
 ### `includes`
 
 (optional)  List of regular expressions to match files in the resulting package. The path is absolute as it would refer directly to the artifact content.
@@ -262,37 +280,58 @@ includes:
 - /usr/bin/g\+\+.*
 ```
 
-### `excludes`
+### `join`
 
-(optional) List of golang regexes. They are in full path form (e.g. `^/usr/bin/foo` ) and indicates that the files listed shouldn't be part of the final artifact
+_since luet>=0.16.0_
 
-Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.
+(optional/required) List of packages which are used to generate a parent image from.
 
-```yaml
-excludes:
-- ^/etc/shadow
-- ^/etc/os-release
-- ^/etc/gshadow
-```
+It might be omitted in place of `image` or `requires`, and will generate an image which will be used as source of the package from the final packages in the above list. The new image is used to run eventually the package building process and a new artifact can be generated out of it.
 
-By combining `excludes` with `includes`, it's possible to include certain files while excluding explicitly some others (`excludes` takes precedence over `includes`).
-
-### `image`
-
-(optional/required) Docker image to be used to build the package (might be omitted in place of `requires`).
 
 ```yaml
-image: "busybox"
+join:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
 ```
 
-It indicates the image used to build the package. The image will be pulled and used to build the package.
+See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
 
+### `package_dir`
+
+(optional) A path relative to the build container where to create the package from.
+
+Similarly to `unpack`, changes the building strategy.
+
+
+```yaml
+steps:
+- mkdir -p /foo/bar/etc/myapp
+- touch /foo/bar/etc/myapp/config
+package_dir: /foo/bar
+```
+
+### `prelude`
+
+(optional) A list of commands to perform in the build container before building.
+
+```yaml
+prelude:
+- |
+   PACKAGE_VERSION=${PACKAGE_VERSION%\+*} && \
+   git clone https://github.com/mudler/yip && cd yip && git checkout "${PACKAGE_VERSION}" -b build
+```
 
 ### `requires`
 
 (optional/required) List of packages which it depends on.
 
-A list of packages that the current package depends on in *build time*. It might be omitted in place of `image`, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package
+A list of packages that the current package depends on in *build time*. It might be omitted in place of `image` or `join`, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package
 
 ```yaml
 requires:
@@ -307,22 +346,25 @@ requires:
 
 See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
 
-### `conflicts`
+### `step`
 
-(optional) List of packages which it conflicts with in *build time*. In the same form of `requires` it is a list of packages that the current one is conflicting with.
+(optional) List of commands to perform in the build container.
 
 ```yaml
-conflicts:
-- name: "foo"
-  category: "bar"
-  version: "1.0"
-...
-- name: "baz"
-  category: "bar"
-  version: "1.0"
+steps:
+- |
+   cd yip && make build-small && mv yip /usr/bin/yip
 ```
 
-See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
+### `unpack`
+
+(optional) Boolean flag. It indicates to use the unpacking strategy while building a package
+
+```yaml
+unpack: true
+```
+
+It indicates that the package content **is** the whole container content.
 
 ## Rutime specs
 
@@ -385,20 +427,15 @@ All the fields (also the ones which are not part of the spec) in the `definition
 
 Here is a list of the full keyword refereces
 
-#### `name`
 
-(required) A string containing the name of the package
+### `annotations`
 
-```yaml
-name: "foo"
-```
-
-#### `version`
-
-(required) A string containing the version of the package
+(optional) A map of freeform package annotations:
 
 ```yaml
-version: "1.0"
+annotations:
+  foo: "bar"
+  baz: "test"
 ```
 
 #### `category`
@@ -407,6 +444,73 @@ version: "1.0"
 
 ```yaml
 category: "system"
+```
+
+### `conflicts`
+
+(optional) List of packages which it conflicts with in *runtime*. In the same form of `requires` it is a list of packages that the current one is conflicting with.
+
+```yaml
+conflicts:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
+```
+
+See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
+
+### `description`
+
+(optional) A string indicating the package description
+
+```yaml
+name: "foo"
+description: "foo is capable of..."
+```
+
+
+### `hidden`
+
+(optional) A boolean indicating whether the package has to be shown or not in the search results (`luet search...`)
+
+```yaml
+hidden: true
+```
+
+### `labels`
+
+(optional) A map of freeform package labels:
+
+```yaml
+labels:
+  foo: "bar"
+  baz: "test"
+```
+
+Labels can be used in `luet search` to find packages by labels, e.g.:
+
+```bash
+$> luet search --by-label foo
+```
+
+### `license`
+
+(optional) A string indicating the package license type.
+
+```yaml
+license: "GPL-3"
+```
+
+#### `name`
+
+(required) A string containing the name of the package
+
+```yaml
+name: "foo"
 ```
 
 ### `provides`
@@ -426,19 +530,11 @@ conflicts:
 
 See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
 
-### `hidden`
-
-(optional) A boolean indicating whether the package has to be shown or not in the search results (`luet search...`)
-
-```yaml
-hidden: true
-```
-
 ### `requires`
 
 (optional) List of packages which it depends on in runtime.
 
-A list of packages that the current package depends on in *runtime*. It might be omitted in place of `image`, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package
+A list of packages that the current package depends on in *runtime*. The determines the resolution tree of the package itself.
 
 ```yaml
 requires:
@@ -453,58 +549,6 @@ requires:
 
 See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
 
-### `conflicts`
-
-(optional) List of packages which it conflicts with in *runtime*. In the same form of `requires` it is a list of packages that the current one is conflicting with.
-
-```yaml
-conflicts:
-- name: "foo"
-  category: "bar"
-  version: "1.0"
-...
-- name: "baz"
-  category: "bar"
-  version: "1.0"
-```
-
-See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
-
-### `annotations`
-
-(optional) A map of freeform package annotations:
-
-```yaml
-annotations:
-  foo: "bar"
-  baz: "test"
-```
-
-### `labels`
-
-(optional) A map of freeform package labels:
-
-```yaml
-labels:
-  foo: "bar"
-  baz: "test"
-```
-
-Labels can be used in `luet search` to find packages by labels, e.g.:
-
-```bash
-$> luet search --by-label foo
-```
-
-### `description`
-
-(optional) A string indicating the package description
-
-```yaml
-name: "foo"
-description: "foo is capable of..."
-```
-
 ### `uri`
 
 (optional) A list of URI relative to the package ( e.g. the official project pages, wikis, README, etc )
@@ -515,13 +559,16 @@ uri:
 - ...
 ```
 
-### `license`
+#### `version`
 
-(optional) A string indicating the package license type.
+(required) A string containing the version of the package
 
 ```yaml
-license: "GPL-3"
+version: "1.0"
 ```
+
+
+
 
 ## Refering to packages from the CLI
 
