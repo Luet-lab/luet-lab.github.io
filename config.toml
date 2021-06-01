@@ -65,7 +65,12 @@ weight = 1
 #contentDir = "content/it"
 #time_format_default = "02.01.2006"
 #time_format_blog = "02.01.2006"
-
+[[menu.main]]
+    name = "Contribution guidelines"
+    weight = 50
+    url = "https://github.com/mudler/luet/contribute"
+    pre = "<i class='fab fa-github'></i>"
+    post = "" 
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
