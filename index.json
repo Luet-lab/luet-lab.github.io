@@ -22,10 +22,10 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/index.json" />
-<meta property="article:modified_time" content="2021-06-10T11:48:59+02:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-06-10T12:03:44+02:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="">
 <meta itemprop="description" content="">
-<meta itemprop="dateModified" content="2021-06-10T11:48:59+02:00" />
+<meta itemprop="dateModified" content="2021-06-10T12:03:44+02:00" />
 <meta itemprop="wordCount" content="0">
 
 
@@ -154,7 +154,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.35f629db989ca5d26706adb37c4c1906.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.0697ebde412b21e48a373f624ecfefd1.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >

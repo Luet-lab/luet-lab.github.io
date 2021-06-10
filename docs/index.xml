@@ -1242,5 +1242,58 @@ docker run -ti --entrypoint /bin/bash --rm luet-runtime-test-image
       </description>
     </item>
     
+    <item>
+      <title>Docs: Contributing</title>
+      <link>https://luet-lab.github.io/docs/docs/contribution-guidelines/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://luet-lab.github.io/docs/docs/contribution-guidelines/</guid>
+      <description>
+        
+        
+        &lt;h2 id=&#34;contributing-to-luet&#34;&gt;Contributing to Luet&lt;/h2&gt;
+&lt;p&gt;Contribution guidelines for the Luet project are on the &lt;a href=&#34;https://github.com/mudler/luet/blob/master/CONTRIBUTING.md&#34;&gt;Github repository&lt;/a&gt;. Here you can find some heads up for contributing to the documentation website.&lt;/p&gt;
+&lt;h2 id=&#34;contributing-to-the-docs-website&#34;&gt;Contributing to the Docs website&lt;/h2&gt;
+&lt;h3 id=&#34;we-develop-with-github&#34;&gt;We Develop with Github&lt;/h3&gt;
+&lt;p&gt;We use &lt;a href=&#34;https://github.com/Luet-lab/docs&#34;&gt;github to host code&lt;/a&gt;, to track issues and feature requests, as well as accept pull requests.&lt;/p&gt;
+&lt;p&gt;We use &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; to format and generate our website, the
+&lt;a href=&#34;https://github.com/google/docsy&#34;&gt;Docsy&lt;/a&gt; theme for styling and site structure,
+and Github Actions to manage the deployment of the site.
+Hugo is an open-source static site generator that provides us with templates,
+content organisation in a standard directory structure, and a website generation
+engine. You write the pages in Markdown (or HTML if you want), and Hugo wraps them up into a website.&lt;/p&gt;
+&lt;p&gt;All submissions, including submissions by project members, require review. We
+use GitHub pull requests for this purpose. Consult
+&lt;a href=&#34;https://help.github.com/articles/about-pull-requests/&#34;&gt;GitHub Help&lt;/a&gt; for more
+information on using pull requests.&lt;/p&gt;
+&lt;h3 id=&#34;any-contributions-you-make-will-be-under-the-software-license-of-the-repository&#34;&gt;Any contributions you make will be under the Software License of the repository&lt;/h3&gt;
+&lt;p&gt;In short, when you submit code changes, your submissions are understood to be under the same License that covers the project. Feel free to contact the maintainers if that&amp;rsquo;s a concern.&lt;/p&gt;
+&lt;h3 id=&#34;updating-a-single-page&#34;&gt;Updating a single page&lt;/h3&gt;
+&lt;p&gt;If you&amp;rsquo;ve just spotted something you&amp;rsquo;d like to change while using the docs, Docsy has a shortcut for you:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Click &lt;strong&gt;Edit this page&lt;/strong&gt; in the top right hand corner of the page you want to modify.&lt;/li&gt;
+&lt;li&gt;If you don&amp;rsquo;t already have an up to date fork of the project repo, you are prompted to get one - click &lt;strong&gt;Fork this repository and propose changes&lt;/strong&gt; or &lt;strong&gt;Update your Fork&lt;/strong&gt; to get an up to date version of the project to edit. The appropriate page in your fork is displayed in edit mode.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;quick-start-with-a-local-checkout&#34;&gt;Quick start with a local checkout&lt;/h3&gt;
+&lt;p&gt;Here&amp;rsquo;s a quick guide to updating the docs with a git local checkout. It assumes you&amp;rsquo;re familiar with the
+GitHub workflow and you&amp;rsquo;re happy to use the automated preview of your doc
+updates:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Fork the &lt;a href=&#34;https://github.com/Luet-lab/docs&#34;&gt;the Docs repo&lt;/a&gt; on GitHub.&lt;/li&gt;
+&lt;li&gt;Make your changes, to see the preview run &lt;code&gt;make serve&lt;/code&gt; and browse to &lt;code&gt;localhost:1313&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;If you&amp;rsquo;re not yet ready for a review, add &amp;ldquo;WIP&amp;rdquo; to the PR name to indicate
+it&amp;rsquo;s a work in progress.&lt;/li&gt;
+&lt;li&gt;Continue updating your doc and pushing your changes until you&amp;rsquo;re happy with
+the content.&lt;/li&gt;
+&lt;li&gt;When you&amp;rsquo;re ready for a review, add a comment to the PR, and remove any
+&amp;ldquo;WIP&amp;rdquo; markers.&lt;/li&gt;
+&lt;li&gt;When you are satisfied send a pull request (PR).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;license&#34;&gt;License&lt;/h3&gt;
+&lt;p&gt;By contributing, you agree that your contributions will be licensed under the project Licenses.&lt;/p&gt;
+
+      </description>
+    </item>
+    
   </channel>
 </rss>
