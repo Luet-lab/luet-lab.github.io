@@ -134,7 +134,9 @@ The directory must represent exactly how the files will be ultimately installed 
 
 &lt;div class=&#34;alert alert-info&#34; role=&#34;alert&#34;&gt;
 &lt;h4 class=&#34;alert-heading&#34;&gt;Note&lt;/h4&gt;
-The above keywords cannot be present in the same spec &lt;strong&gt;at the same time&lt;/strong&gt;, or they cannot be combined. But you are free to create further intermediate specs to achieve the desired image.
+
+    The above keywords cannot be present in the same spec &lt;strong&gt;at the same time&lt;/strong&gt;, or they cannot be combined. But you are free to create further intermediate specs to achieve the desired image.
+
 &lt;/div&gt;
 
 &lt;h4 id=&#34;difference-between-join-and-requires&#34;&gt;Difference between &lt;code&gt;join&lt;/code&gt; and &lt;code&gt;requires&lt;/code&gt;&lt;/h4&gt;

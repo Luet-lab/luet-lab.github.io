@@ -122,8 +122,10 @@ For this purpose, we have picked a real-world example: &lt;a href=&#34;https://g
 
 &lt;div class=&#34;alert alert-warning&#34; role=&#34;alert&#34;&gt;
 &lt;h4 class=&#34;alert-heading&#34;&gt;Warning&lt;/h4&gt;
-This article contains references to Luet repositories that were deprecated, and needs to be updated.
+
+    This article contains references to Luet repositories that were deprecated, and needs to be updated.
 Please refer to the &lt;a href=&#34;../../tutorials/hello_world/&#34;&gt;&amp;ldquo;Hello World&amp;rdquo;&lt;/a&gt; tutorial instead.
+
 &lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://github.com/BarkyTheDog/catclock/raw/master/catclock.gif&#34; alt=&#34;catclock&#34;&gt;&lt;/p&gt;

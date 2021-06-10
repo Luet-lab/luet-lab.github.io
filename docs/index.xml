@@ -434,7 +434,9 @@ The directory must represent exactly how the files will be ultimately installed 
 
 &lt;div class=&#34;alert alert-info&#34; role=&#34;alert&#34;&gt;
 &lt;h4 class=&#34;alert-heading&#34;&gt;Note&lt;/h4&gt;
-The above keywords cannot be present in the same spec &lt;strong&gt;at the same time&lt;/strong&gt;, or they cannot be combined. But you are free to create further intermediate specs to achieve the desired image.
+
+    The above keywords cannot be present in the same spec &lt;strong&gt;at the same time&lt;/strong&gt;, or they cannot be combined. But you are free to create further intermediate specs to achieve the desired image.
+
 &lt;/div&gt;
 
 &lt;h4 id=&#34;difference-between-join-and-requires&#34;&gt;Difference between &lt;code&gt;join&lt;/code&gt; and &lt;code&gt;requires&lt;/code&gt;&lt;/h4&gt;
@@ -773,8 +775,10 @@ $ luet search --table &amp;lt;regex&amp;gt;
 
 &lt;div class=&#34;alert alert-warning&#34; role=&#34;alert&#34;&gt;
 &lt;h4 class=&#34;alert-heading&#34;&gt;Warning&lt;/h4&gt;
-This article contains references to Luet repositories that were deprecated, and needs to be updated.
+
+    This article contains references to Luet repositories that were deprecated, and needs to be updated.
 Please refer to the &lt;a href=&#34;../../tutorials/hello_world/&#34;&gt;&amp;ldquo;Hello World&amp;rdquo;&lt;/a&gt; tutorial instead.
+
 &lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://github.com/BarkyTheDog/catclock/raw/master/catclock.gif&#34; alt=&#34;catclock&#34;&gt;&lt;/p&gt;
@@ -1016,8 +1020,10 @@ luet box &lt;span style=&#34;color:#204a87&#34;&gt;exec&lt;/span&gt; --rootfs &l
 
 &lt;div class=&#34;alert alert-warning&#34; role=&#34;alert&#34;&gt;
 &lt;h4 class=&#34;alert-heading&#34;&gt;Warning&lt;/h4&gt;
-This article is outdated.
+
+    This article is outdated.
 Please refer to the &lt;a href=&#34;../../tutorials/hello_world/&#34;&gt;&amp;ldquo;Hello World&amp;rdquo;&lt;/a&gt; tutorial instead.
+
 &lt;/div&gt;
 
 &lt;p&gt;Here we show an example on how to build &amp;ldquo;burnable&amp;rdquo; SD images for Raspberry Pi with Luet. This approach lets you describe and version OTA upgrades for your embedded devices, delivering upgrades as layer upgrades on the Pi.&lt;/p&gt;

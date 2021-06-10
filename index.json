@@ -3,13 +3,10 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.78.2" />
-
-<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+<meta name="generator" content="Hugo 0.78.2" /><META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
 
 
-
-<link rel="shortcut icon" href="/favicons/favicon.ico" >
+<link rel="shortcut icon" href="/docs/favicons/favicon.ico" >
 <link rel="apple-touch-icon" href="/docs/favicons/apple-touch-icon-180x180.png" sizes="180x180">
 <link rel="icon" type="image/png" href="/docs/favicons/favicon-16x16.png" sizes="16x16">
 <link rel="icon" type="image/png" href="/docs/favicons/favicon-32x32.png" sizes="32x32">
@@ -20,14 +17,15 @@
 <link rel="icon" type="image/png" href="/docs/favicons/android-144x144.png" sizes="144x144">
 <link rel="icon" type="image/png" href="/docs/favicons/android-192x192.png" sizes="192x192">
 
-<title>Luet</title><meta property="og:title" content="" />
+<title>Luet</title>
+<meta name="description" content="Package manager built from containers"><meta property="og:title" content="" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/index.json" />
-<meta property="article:modified_time" content="2021-06-10T11:46:46+02:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-06-10T11:48:59+02:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="">
 <meta itemprop="description" content="">
-<meta itemprop="dateModified" content="2021-06-10T11:46:46+02:00" />
+<meta itemprop="dateModified" content="2021-06-10T11:48:59+02:00" />
 <meta itemprop="wordCount" content="0">
 
 
@@ -38,24 +36,10 @@
 <meta name="twitter:description" content=""/>
 
 
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-00000000-0', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
-
-
-
-
-<link rel="preload" href="/docs/scss/main.min.16687f74593d961a70c9c1c6aa6050d82ced4d2bcd177d55cf64ddc5a112c790.css" as="style">
-<link href="/docs/scss/main.min.16687f74593d961a70c9c1c6aa6050d82ced4d2bcd177d55cf64ddc5a112c790.css" rel="stylesheet" integrity="">
+<link rel="preload" href="/docs/scss/main.min.8d12a688ee2db0046c504b863bdaef986390c813ef5f94237f0a4d262655069d.css" as="style">
+<link href="/docs/scss/main.min.8d12a688ee2db0046c504b863bdaef986390c813ef5f94237f0a4d262655069d.css" rel="stylesheet" integrity="">
 
 
 <script
@@ -69,6 +53,20 @@ if (!doNotTrack) {
   crossorigin="anonymous"></script>
 
 
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-00000000-0', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
   </head>
@@ -90,10 +88,14 @@ if (!doNotTrack) {
 				
 				
 				
+				
+				
 				<a class="nav-link" href="/docs/about/" ><span>About</span></a>
 			</li>
 			
 			<li class="nav-item mr-4 mb-2 mb-lg-0">
+				
+				
 				
 				
 				
@@ -110,10 +112,14 @@ if (!doNotTrack) {
 				
 				
 				
+				
+				
 				<a class="nav-link" href="/docs/blog/" ><span>Blog</span></a>
 			</li>
 			
 			<li class="nav-item mr-4 mb-2 mb-lg-0">
+				
+				
 				
 				
 				
@@ -128,7 +134,9 @@ if (!doNotTrack) {
 				
 				
 				
-				<a class="nav-link" href="https://github.com/mudler/luet/contribute" target="_blank" ><span>Contribution guidelines</span></a>
+				
+				
+				<a class="nav-link" href="https://github.com/mudler/luet/contribute" target="_blank" ><i class='fab fa-github'></i><span>Contribution guidelines</span></a>
 			</li>
 			
 			
@@ -146,7 +154,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.146e0643bb6f4eb53c9b9e10ecb1e90e.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.35f629db989ca5d26706adb37c4c1906.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -177,13 +185,13 @@ if (!doNotTrack) {
 <ul class="list-inline mb-0">
   
   <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="GitHub" aria-label="GitHub">
-    <a class="text-white" target="_blank" rel="noopener noreferrer" href="https://github.com/mudler/luet">
+    <a class="text-white" target="_blank" rel="noopener" href="https://github.com/mudler/luet" aria-label="GitHub">
       <i class="fab fa-github"></i>
     </a>
   </li>
   
   <li class="list-inline-item mx-2 h3" data-toggle="tooltip" data-placement="top" title="Slack" aria-label="Slack">
-    <a class="text-white" target="_blank" rel="noopener noreferrer" href="https://join.slack.com/t/luet/shared_invite/enQtOTQxMjcyNDQ0MDUxLWQ5ODVlNTI1MTYzNDRkYzkyYmM1YWE5YjM0NTliNDEzNmQwMTkxNDRhNDIzM2Y5NDBlOTZjZTYxYWQyNDE4YzY">
+    <a class="text-white" target="_blank" rel="noopener" href="https://join.slack.com/t/luet/shared_invite/enQtOTQxMjcyNDQ0MDUxLWQ5ODVlNTI1MTYzNDRkYzkyYmM1YWE5YjM0NTliNDEzNmQwMTkxNDRhNDIzM2Y5NDBlOTZjZTYxYWQyNDE4YzY" aria-label="Slack">
       <i class="fab fa-slack"></i>
     </a>
   </li>
@@ -195,7 +203,7 @@ if (!doNotTrack) {
       </div>
       <div class="col-12 col-sm-4 text-center py-2 order-sm-2">
         <small class="text-white">&copy; 2021 Ettore Di Giacinto All Rights Reserved</small>
-        <small class="ml-1"><a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a></small>
+        <small class="ml-1"><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a></small>
 	
 		<p class="mt-2"><a href="/docs/about/">About Luet</a></p>
 	
@@ -206,9 +214,15 @@ if (!doNotTrack) {
 
 
     </div>
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+
+
+
+
+
+
+ 
 
 
 
@@ -222,7 +236,7 @@ if (!doNotTrack) {
 
 
 
-<script src="/docs/js/main.min.460c8ae21829f9b330823a08f34ac961d7d0daa8874c8c9eba7ea0484bb42a79.js" integrity="sha256-RgyK4hgp&#43;bMwgjoI80rJYdfQ2qiHTIyeun6gSEu0Knk=" crossorigin="anonymous"></script>
+<script src="/docs/js/main.min.62d5d89dda5fd5eaef8356b27f7171a800bd19917c4b1ab85ec6dca281c201f8.js" integrity="sha256-YtXYndpf1ervg1ayf3FxqAC9GZF8Sxq4XsbcooHCAfg=" crossorigin="anonymous"></script>
 
 
 
