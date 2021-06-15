@@ -98,7 +98,7 @@ requires:
 - name: "alpine"
   version: "3.1"
   category: "seed"
-unpack: "true" # Tells luet to use the image content by unpacking it
+unpack: true # Tells luet to use the image content by unpacking it
 includes: 
 - /bin/sh
 ```
