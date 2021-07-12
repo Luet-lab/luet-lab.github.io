@@ -304,7 +304,15 @@ $&amp;gt; luet create-repo --name &amp;quot;test&amp;quot; --output $PWD/out --p
 $&amp;gt; ls out
 foo-bar-0.1-builder.image.tar  foo-bar-0.1.image.tar  foo-bar-0.1.metadata.yaml  foo-bar-0.1.package.tar  repository.yaml  tree.tar
 
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;notes&#34;&gt;Notes&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;repositories-type&#34;&gt;Repositories type&lt;/h3&gt;
+&lt;p&gt;There are 3 types of repositories supported by luet: &lt;code&gt;disk&lt;/code&gt;, &lt;code&gt;http&lt;/code&gt;, &lt;code&gt;docker&lt;/code&gt;.&lt;/p&gt;
+&lt;h4 id=&#34;disk&#34;&gt;&lt;code&gt;disk&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;It is a repository which is merely a local folder in your system. When creating a repository and specifying &lt;code&gt;--output&lt;/code&gt;, &lt;code&gt;luet&lt;/code&gt; expects a local path to the system where to store the generated metadata.&lt;/p&gt;
+&lt;h4 id=&#34;http&#34;&gt;&lt;code&gt;http&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;It is a repository type which is hosted behind a webserver. When creating a repository and specifying &lt;code&gt;--output&lt;/code&gt;, &lt;code&gt;luet&lt;/code&gt; expects a local path to the system where to store the generated metadata, similarly to the &lt;code&gt;disk&lt;/code&gt; repository type. Luet is not handling any file upload. The &lt;code&gt;http&lt;/code&gt; repository type gains meaning when being used from the client, where the repository source must be specified&lt;/p&gt;
+&lt;h4 id=&#34;docker&#34;&gt;&lt;code&gt;docker&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;When specifying the &lt;code&gt;docker&lt;/code&gt; repository type, &lt;code&gt;luet&lt;/code&gt; will generate final images from the build results and upload them to the docker reference specified with &lt;code&gt;--output&lt;/code&gt;. The images contains the artifact output from the build result, and they are tagged accordingly to their package name. A single image reference needs to be passed, all the packages will be pushed in a single image but with different tags.&lt;/p&gt;
+&lt;h2 id=&#34;notes&#34;&gt;Notes&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;The tree of definition being used to build the repository, and the package directories must &lt;strong&gt;not&lt;/strong&gt; be symlinks.&lt;/li&gt;
 &lt;li&gt;To build a repository is not required to hold the packages artifacts, only the respective &lt;code&gt;metadata.yaml&lt;/code&gt; file is required.&lt;/li&gt;
