@@ -71,6 +71,23 @@ foo-bar-0.1-builder.image.tar  foo-bar-0.1.image.tar  foo-bar-0.1.metadata.yaml 
 
 ```
 
+### Repositories type
+
+There are 3 types of repositories supported by luet: `disk`, `http`, `docker`.
+
+#### `disk`
+
+It is a repository which is merely a local folder in your system. When creating a repository and specifying ```--output```, `luet` expects a local path to the system where to store the generated metadata.
+
+#### `http`
+
+It is a repository type which is hosted behind a webserver. When creating a repository and specifying ```--output```, `luet` expects a local path to the system where to store the generated metadata, similarly to the `disk` repository type. Luet is not handling any file upload. The `http` repository type gains meaning when being used from the client, where the repository source must be specified
+
+#### `docker`
+
+When specifying the `docker` repository type, `luet` will generate final images from the build results and upload them to the docker reference specified with ```--output```. The images contains the artifact output from the build result, and they are tagged accordingly to their package name. A single image reference needs to be passed, all the packages will be pushed in a single image but with different tags.
+
+
 ## Notes
 
 - The tree of definition being used to build the repository, and the package directories must **not** be symlinks.
