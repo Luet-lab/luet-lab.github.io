@@ -23,12 +23,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/packages/specfile/" />
-<meta property="article:modified_time" content="2021-06-15T18:53:46+02:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-07-12T10:18:02+02:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Specfile">
 <meta itemprop="description" content="Luet specfile syntax
 ">
-<meta itemprop="dateModified" content="2021-06-15T18:53:46+02:00" />
-<meta itemprop="wordCount" content="2107">
+<meta itemprop="dateModified" content="2021-07-12T10:18:02+02:00" />
+<meta itemprop="wordCount" content="2302">
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.7cdb80ae903f784deb1a113f0fc63413.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.3487cb6e12d345eb9978d2ebf87190a8.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -192,7 +192,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.7cdb80ae903f784deb1a113f0fc63413.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.3487cb6e12d345eb9978d2ebf87190a8.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -827,6 +827,7 @@ if (!doNotTrack) {
         <li><a href="#package_dir"><code>package_dir</code></a></li>
         <li><a href="#prelude"><code>prelude</code></a></li>
         <li><a href="#requires"><code>requires</code></a></li>
+        <li><a href="#requires_final_images"><code>requires_final_images</code></a></li>
         <li><a href="#step"><code>step</code></a></li>
         <li><a href="#unpack"><code>unpack</code></a></li>
       </ul>
@@ -972,8 +973,8 @@ The directory must represent exactly how the files will be ultimately installed 
 <p>The image can be resolved either by:</p>
 <ol>
 <li>providing a specific image name with <code>image</code></li>
-<li>providing a set of package requirements with <code>requires</code> which will be constructed a new image from</li>
-<li>providing a set of packages to join their result from with <code>join</code>.</li>
+<li>providing a set of package requirements with <code>requires</code> which will be constructed a new image from. The resulting image is an image linked between each other with the <code>FROM</code> field in the Dockerfile following the SAT solver ordering.</li>
+<li>providing a set of packages to squash their result from <code>requires</code> and by specifying <code>requires_final_images: true</code>.</li>
 </ol>
 
 
@@ -984,10 +985,10 @@ The directory must represent exactly how the files will be ultimately installed 
 
 </div>
 
-<h4 id="difference-between-join-and-requires">Difference between <code>join</code> and <code>requires</code></h4>
-<p>While <code>join</code> and <code>requires</code> may look similar, they do a completely different job.</p>
-<p><code>requires</code> generates a graph from all the <code>images</code> of the specfile referenced inside the list. This means it builds a chain of images that are used to build the packages, e.g.: <code>packageA(image: busybox) -&gt; packageB (requires: A) -&gt; packageC (requires: C)</code>.</p>
-<p><code>join</code> instead builds an artifact for each of the packages listed from their compilation specs and it will later <em>join</em> them together in a new container image which is then used later in the build process to create an artifact.</p>
+<h4 id="difference-between-requires-and-requires-with-requires_final_images-true">Difference between <code>requires</code> and <code>requires</code> with <code>requires_final_images: true</code></h4>
+<p><code>requires</code> generates a graph from all the <code>images</code> of the specfile referenced inside the list. This means it builds a chain of images that are used to build the packages, e.g.: <code>packageA(image: busybox) -&gt; packageB (requires: A) -&gt; packageC (requires: C)</code>. The container which is running your build then <strong>inherits</strong> it&rsquo;s parents from a chain of order resolution, provided by the SAT solver.</p>
+<p>When specifying <code>requires_final_images: true</code> luet builds an artifact for each of the packages listed from their compilation specs and it will later <em>squash</em> them together in a new container image which is then used in the build process to create an artifact.</p>
+<p>The key difference is about <em>where</em> your build is going to run from. By specifying <code>requires_final_images</code> it will be constructed a new image with the content of each package - while if setting it to false, it will order the images appropriately and link them together with the Dockerfile <code>FROM</code> field. That allows to reuse the same images used to build the packages in the require section - or - create a new one from the result of each package compilation.</p>
 <h2 id="keywords">Keywords</h2>
 <p>Here is a list of the full keyword refereces for the <code>build.yaml</code> file.</p>
 <h3 id="conflicts"><code>conflicts</code></h3>
@@ -1046,7 +1047,7 @@ The directory must represent exactly how the files will be ultimately installed 
 <h3 id="image"><code>image</code></h3>
 <p>(optional/required) Docker image to be used to build the package.</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">image</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;busybox&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
-</span></code></pre></div><p>It might be omitted in place of <code>join</code> or <code>requires</code>, and indicates the image used to build the package. The image will be pulled and used to build the package.</p>
+</span></code></pre></div><p>It might be omitted in place of <code>requires</code>, and indicates the image used to build the package. The image will be pulled and used to build the package.</p>
 <h3 id="includes"><code>includes</code></h3>
 <p>(optional)  List of regular expressions to match files in the resulting package. The path is absolute as it would refer directly to the artifact content.</p>
 <p>Wildcards and golang regular expressions are supported. If specified, files which are not matching any of the regular expressions in the list will be excluded in the final package.</p>
@@ -1061,7 +1062,8 @@ The directory must represent exactly how the files will be ultimately installed 
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/cpp.*</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">/usr/bin/g\+\+.*</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></code></pre></div><h3 id="join"><code>join</code></h3>
-<p><em>since luet&gt;=0.16.0</em></p>
+<p><em>since luet&gt;=0.16.0</em>
+<em>to be deprecated in luet&gt;=0.18.0 in favor of <code>requires_final_images</code></em></p>
 <p>(optional/required) List of packages which are used to generate a parent image from.</p>
 <p>It might be omitted in place of <code>image</code> or <code>requires</code>, and will generate an image which will be used as source of the package from the final packages in the above list. The new image is used to run eventually the package building process and a new artifact can be generated out of it.</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">join</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
@@ -1092,7 +1094,7 @@ The directory must represent exactly how the files will be ultimately installed 
 </span><span style="color:#8f5902;font-style:italic">   git clone https://github.com/mudler/yip &amp;&amp; cd yip &amp;&amp; git checkout &#34;${PACKAGE_VERSION}&#34; -b build</span><span style="color:#f8f8f8;text-decoration:underline">   
 </span></code></pre></div><h3 id="requires"><code>requires</code></h3>
 <p>(optional/required) List of packages which it depends on.</p>
-<p>A list of packages that the current package depends on in <em>build time</em>. It might be omitted in place of <code>image</code> or <code>join</code>, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package</p>
+<p>A list of packages that the current package depends on in <em>build time</em>. It might be omitted in place of <code>image</code>, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">requires</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;foo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
@@ -1102,6 +1104,21 @@ The directory must represent exactly how the files will be ultimately installed 
 </span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
 </span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
 </span></code></pre></div><p>See <a href="/docs/docs/concepts/packages">Package concepts</a> for more information on how to represent a package in a Luet tree.</p>
+<h3 id="requires_final_images"><code>requires_final_images</code></h3>
+<p><em>since luet&gt;=0.17.0</em></p>
+<p>(optional) A boolean flag which instruct luet to use the final images in the <code>requires</code> field.</p>
+<p>By setting <code>requires_final_images: true</code> in the compilation spec, packages in the <code>requires</code> section will be first compiled, and afterwards the final packages are squashed together in a new image that will be used during build.</p>
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">requires</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;foo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">...</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;baz&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">requires_final_images</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">true</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div><p><code>requires_final_images</code> replaces the use of <code>join</code>, which will be deprecated in luet <code>&gt;=0.18.0</code>.</p>
 <h3 id="step"><code>step</code></h3>
 <p>(optional) List of commands to perform in the build container.</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">steps</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
@@ -1315,8 +1332,8 @@ The directory must represent exactly how the files will be ultimately installed 
 	<div class="text-muted mt-5 pt-3 border-top">
 
     Last modified
-    June 15, 2021
-    : <a  href="https://github.com/Luet-lab/docs/commit/21e769ce3bec9ac46eea35c93c4723f223472924">Merge pull request #8 from bk201/fix-sh-sample (21e769c)</a>
+    July 12, 2021
+    : <a  href="https://github.com/Luet-lab/docs/commit/17ad68521ede5de035ad785f4b123ee76a4f507b">Add docs about requires_final_images (17ad685)</a>
 
 </div>
 
