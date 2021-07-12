@@ -147,20 +147,20 @@ Luet needs an image to kick-off the build process for each package. This image i
 The image can be resolved either by: 
 
 1) providing a specific image name with `image` 
-2) providing a set of package requirements with `requires` which will be constructed a new image from 
-3) providing a set of packages to join their result from with `join`. 
+2) providing a set of package requirements with `requires` which will be constructed a new image from. The resulting image is an image linked between each other with the `FROM` field in the Dockerfile following the SAT solver ordering.
+3) providing a set of packages to squash their result from `requires` and by specifying `requires_final_images: true`. 
 
 {{< alert color="info" title="Note" >}}
 The above keywords cannot be present in the same spec **at the same time**, or they cannot be combined. But you are free to create further intermediate specs to achieve the desired image.
 {{< /alert >}}
 
-#### Difference between `join` and `requires`
+#### Difference between `requires` and `requires` with `requires_final_images: true`
 
-While `join` and `requires` may look similar, they do a completely different job. 
+`requires` generates a graph from all the `images` of the specfile referenced inside the list. This means it builds a chain of images that are used to build the packages, e.g.: `packageA(image: busybox) -> packageB (requires: A) -> packageC (requires: C)`. The container which is running your build then **inherits** it's parents from a chain of order resolution, provided by the SAT solver.
 
-`requires` generates a graph from all the `images` of the specfile referenced inside the list. This means it builds a chain of images that are used to build the packages, e.g.: `packageA(image: busybox) -> packageB (requires: A) -> packageC (requires: C)`.
+When specifying `requires_final_images: true` luet builds an artifact for each of the packages listed from their compilation specs and it will later *squash* them together in a new container image which is then used in the build process to create an artifact.
 
-`join` instead builds an artifact for each of the packages listed from their compilation specs and it will later *join* them together in a new container image which is then used later in the build process to create an artifact.
+The key difference is about *where* your build is going to run from. By specifying `requires_final_images` it will be constructed a new image with the content of each package - while if setting it to false, it will order the images appropriately and link them together with the Dockerfile `FROM` field. That allows to reuse the same images used to build the packages in the require section - or - create a new one from the result of each package compilation.
 
 ## Keywords
 
@@ -259,7 +259,7 @@ By combining `excludes` with `includes`, it's possible to include certain files 
 image: "busybox"
 ```
 
-It might be omitted in place of `join` or `requires`, and indicates the image used to build the package. The image will be pulled and used to build the package.
+It might be omitted in place of `requires`, and indicates the image used to build the package. The image will be pulled and used to build the package.
 
 ### `includes`
 
@@ -283,6 +283,7 @@ includes:
 ### `join`
 
 _since luet>=0.16.0_
+_to be deprecated in luet>=0.18.0 in favor of `requires_final_images`_
 
 (optional/required) List of packages which are used to generate a parent image from.
 
@@ -335,7 +336,7 @@ prelude:
 
 (optional/required) List of packages which it depends on.
 
-A list of packages that the current package depends on in *build time*. It might be omitted in place of `image` or `join`, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package
+A list of packages that the current package depends on in *build time*. It might be omitted in place of `image`, and determines the resolution tree of the package itself. A new image is composed from the packages listed in this section in order to build the package
 
 ```yaml
 requires:
@@ -349,6 +350,29 @@ requires:
 ```
 
 See [Package concepts](/docs/docs/concepts/packages) for more information on how to represent a package in a Luet tree.
+
+### `requires_final_images`
+
+_since luet>=0.17.0_
+
+(optional) A boolean flag which instruct luet to use the final images in the `requires` field.
+
+By setting `requires_final_images: true` in the compilation spec, packages in the `requires` section will be first compiled, and afterwards the final packages are squashed together in a new image that will be used during build.
+
+```yaml
+requires:
+- name: "foo"
+  category: "bar"
+  version: "1.0"
+...
+- name: "baz"
+  category: "bar"
+  version: "1.0"
+
+requires_final_images: true
+```
+
+`requires_final_images` replaces the use of `join`, which will be deprecated in luet `>=0.18.0`.
 
 ### `step`
 
