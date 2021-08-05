@@ -280,6 +280,14 @@ includes:
 - /usr/bin/g\+\+.*
 ```
 
+__Note__: Directories are treated as standard entries, so to include a single file, you need also to explictly include also it's directory. Consider this example to include `/etc/lvm/lvm.conf`:
+```yaml
+includes:
+- /etc$
+- /etc/lvm$
+- /etc/lvm/lvm.conf
+```
+
 ### `join`
 
 _since luet>=0.16.0_
