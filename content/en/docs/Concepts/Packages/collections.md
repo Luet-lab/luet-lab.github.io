@@ -8,13 +8,7 @@ description: >
 
 `Collections` are a special superset of packages. To define a collection, instead of using a `definition.yaml` file, create a `collection.yaml` file with a list of packages:
 
-```yaml
-packages:
-- name: "foo"
-  category: "bar"
-  version: "1.1"
-...
-```
+{{<githubembed repo="mudler/luet" file="tests/fixtures/shared_templates/test/collection.yaml" lang="yaml">}}
 
 Packages under a collection shares the same `build.yaml` and `finalize.yaml`, so a typical package layout can be:
 
