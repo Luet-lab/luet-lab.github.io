@@ -23,12 +23,12 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://luet-lab.github.io/docs/docs/concepts/packages/templates/" />
-<meta property="article:modified_time" content="2021-07-12T10:48:48+02:00" /><meta property="og:site_name" content="Luet" />
+<meta property="article:modified_time" content="2021-08-05T09:52:19+02:00" /><meta property="og:site_name" content="Luet" />
 <meta itemprop="name" content="Templated packages">
 <meta itemprop="description" content="Use templates to fine tune build specs
 ">
-<meta itemprop="dateModified" content="2021-07-12T10:48:48+02:00" />
-<meta itemprop="wordCount" content="183">
+<meta itemprop="dateModified" content="2021-08-05T09:52:19+02:00" />
+<meta itemprop="wordCount" content="403">
 
 
 
@@ -157,7 +157,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.8a948bc6a0086fe8dab5f711f92ab34a.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.987b40e4656bd72f5892b59c93908683.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -192,7 +192,7 @@ if (!doNotTrack) {
   aria-label="Search this site…"
   autocomplete="off"
   
-  data-offline-search-index-json-src="/docs/offline-search-index.8a948bc6a0086fe8dab5f711f92ab34a.json"
+  data-offline-search-index-json-src="/docs/offline-search-index.987b40e4656bd72f5892b59c93908683.json"
   data-offline-search-base-href="/"
   data-offline-search-max-results="10"
 >
@@ -808,6 +808,12 @@ if (!doNotTrack) {
 <nav id="TableOfContents">
   <ul>
     <li><a href="#interpolating-globally">Interpolating globally</a></li>
+    <li><a href="#shared-templates">Shared templates</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#limitations">Limitations</a></li>
     <li><a href="#references">References</a></li>
     <li><a href="#examples">Examples</a></li>
   </ul>
@@ -826,7 +832,7 @@ if (!doNotTrack) {
 	<h1>Templated packages</h1>
     <div class="lead">Use templates to fine tune build specs</div>
 	
-	<p>Luet supports the <a href="https://helm.sh/docs/chart_template_guide/"><code>helm</code> rendering engine template</a>. It&rsquo;s being used to interpolate <code>build.yaml</code> and <code>finalize.yaml</code> files before their execution.</p>
+	<p>Luet supports the <a href="https://helm.sh/docs/chart_template_guide/"><code>helm</code> rendering engine template</a>. It&rsquo;s being used to interpolate <code>build.yaml</code> and <code>finalize.yaml</code> files before their execution. The following document assumes you are familiar with the <code>helm</code> templating.</p>
 <p>The <code>build.yaml</code> and <code>finalize.yaml</code> files are rendered during build time, and it&rsquo;s possible to use the <code>helm</code> templating syntax inside such files. The <code>definition.yaml</code> file will be used to interpolate templating values available in <code>build.yaml</code></p>
 <p>Given the following <code>definition.yaml</code>:</p>
 <div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;test&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
@@ -852,6 +858,67 @@ if (!doNotTrack) {
 </span></code></pre></div><p>This mechanism can be used in collections as well, and each stanza in <code>packages</code> is used to interpolate each single package.</p>
 <h2 id="interpolating-globally">Interpolating globally</h2>
 <p>It&rsquo;s possible to interpolate during build phase all the package specs targeted for build with the <code>--values</code> flag, which takes a yaml file of an arbitrary format, if variables are clashing, the yaml supplied in <code>--values</code> takes precedence and overwrite the values of each single <code>definition.yaml</code> file.</p>
+<h2 id="shared-templates">Shared templates</h2>
+<p>Since luet <code>0.17.5</code> it is possible to share templates across different packages. All templates blocks found inside the <code>templates</code> folder inside the root <code>luet tree</code> of a repository gets templated and shared across all the packages while rendering each compilation spec of the given tree.</p>
+<p>Consider the following:</p>
+<pre><code>shared_templates
+├── templates
+│   └── writefile.yaml
+└── test
+    ├── build.yaml
+    └── collection.yaml
+</code></pre><h4 id="collectionyaml"><code>collection.yaml</code></h4>
+<p>We define here two packages with a collection. They will share the same compilation spec to generate two different packages
+
+
+
+
+
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">packages</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;test&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;foo&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#204a87;font-weight:bold">category</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;test&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;bar&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span><span style="color:#204a87;font-weight:bold">version</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;1.0&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></div>
+
+<small> <i class='fab fa-github'></i> <i>Complete source code:  <a target=_blank href="https://github.com/mudler/luet/blob/master/tests/fixtures/shared_templates/test/collection.yaml">https://github.com/mudler/luet/blob/master/tests/fixtures/shared_templates/test/collection.yaml</a></i> </small>
+<hr>
+</p>
+<h4 id="writefileyaml"><code>writefile.yaml</code></h4>
+<p>All the files in the <code>templates</code> folder will get rendered by the template for each package in the tree. We define here a simple block to write out a file from the context which is passed by:
+
+
+
+
+
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">{{<span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">define &#34;writefile&#34; }}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>- <span style="color:#000">echo conflict &gt; /foo/{{.}}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>{{<span style="color:#000">end}}</span></code></pre></div>
+
+<small> <i class='fab fa-github'></i> <i>Complete source code:  <a target=_blank href="https://github.com/mudler/luet/blob/master/tests/fixtures/shared_templates/templates/writefile.yaml">https://github.com/mudler/luet/blob/master/tests/fixtures/shared_templates/templates/writefile.yaml</a></i> </small>
+<hr>
+</p>
+<h4 id="buildyaml"><code>build.yaml</code></h4>
+<p>Finally the build spec consumes the template block we declared above, passing by the name of the package:
+
+
+
+
+
+<div class="highlight"><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#204a87;font-weight:bold">image</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;alpine&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">prelude</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span>- <span style="color:#000">mkdir /foo</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">steps</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span>{{<span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">template &#34;writefile&#34; .Values.name }}</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">package_dir</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">/foo</span></code></pre></div>
+
+<small> <i class='fab fa-github'></i> <i>Complete source code:  <a target=_blank href="https://github.com/mudler/luet/blob/master/tests/fixtures/shared_templates/test/build.yaml">https://github.com/mudler/luet/blob/master/tests/fixtures/shared_templates/test/build.yaml</a></i> </small>
+<hr>
+</p>
+<h2 id="limitations">Limitations</h2>
+<p>The <code>finalize.yaml</code> file has access only to the package fields during templating. Extra fields that are present in the <code>definition.yaml</code> file are <em>not</em> accessible during rendering in the <code>finalize.yaml</code> file, but only the package fields (<code>name</code>, <code>version</code>, <code>labels</code>, <code>annotations</code>, &hellip;)</p>
 <h2 id="references">References</h2>
 <ul>
 <li><a href="https://helm.sh/docs/chart_template_guide/">Helm Template syntax guide</a></li>
@@ -930,8 +997,8 @@ if (!doNotTrack) {
 	<div class="text-muted mt-5 pt-3 border-top">
 
     Last modified
-    July 12, 2021
-    : <a  href="https://github.com/Luet-lab/docs/commit/f8fdf379923514901de645d37935c22af1ecc8b1">Add docs about repository types (f8fdf37)</a>
+    August 5, 2021
+    : <a  href="https://github.com/Luet-lab/docs/commit/c4b63e923b92678c9cdd1f84d51d10b2fbf71c6e">Add docs about shared templates (c4b63e9)</a>
 
 </div>
 
