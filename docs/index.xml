@@ -1376,6 +1376,10 @@ docker run -ti --entrypoint /bin/bash --rm luet-runtime-test-image
 &lt;td&gt;&lt;a href=&#34;https://github.com/mudler/android-builds&#34;&gt;https://github.com/mudler/android-builds&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+&lt;td&gt;Example repository template to build packages on github actions and push packages on a container registry&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/Luet-lab/github-repository&#34;&gt;https://github.com/Luet-lab/github-repository&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
 &lt;td&gt;Immutable container OS toolkit&lt;/td&gt;
 &lt;td&gt;&lt;a href=&#34;https://github.com/rancher-sandbox/cOS-toolkit&#34;&gt;https://github.com/rancher-sandbox/cOS-toolkit&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;
