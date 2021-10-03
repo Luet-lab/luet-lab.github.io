@@ -1345,6 +1345,47 @@ docker run -ti --entrypoint /bin/bash --rm luet-runtime-test-image
     </item>
     
     <item>
+      <title>Docs: References</title>
+      <link>https://luet-lab.github.io/docs/docs/resources/references/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://luet-lab.github.io/docs/docs/resources/references/</guid>
+      <description>
+        
+        
+        &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;p&gt;Here is a list of references to projects that are related to Luet (open up a PR to add yours to the list!):&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;th&gt;URL&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Official Luet repository&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/Luet-lab/luet-repo&#34;&gt;https://github.com/Luet-lab/luet-repo&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Example repository to host package browser websites on gh-pages. It uses the package-browser extension to generate HTML pages from a list of luet repositories&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/Luet-lab/package-browser-sample&#34;&gt;https://github.com/Luet-lab/package-browser-sample&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LineageOS builds with luet&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/mudler/android-builds&#34;&gt;https://github.com/mudler/android-builds&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Immutable container OS toolkit&lt;/td&gt;
+&lt;td&gt;&lt;a href=&#34;https://github.com/rancher-sandbox/cOS-toolkit&#34;&gt;https://github.com/rancher-sandbox/cOS-toolkit&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+      </description>
+    </item>
+    
+    <item>
       <title>Docs: Contributing</title>
       <link>https://luet-lab.github.io/docs/docs/contribution-guidelines/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
