@@ -87,6 +87,8 @@ It is a repository type which is hosted behind a webserver. When creating a repo
 
 When specifying the `docker` repository type, `luet` will generate final images from the build results and upload them to the docker reference specified with ```--output```. The images contains the artifact output from the build result, and they are tagged accordingly to their package name. A single image reference needs to be passed, all the packages will be pushed in a single image but with different tags.
 
+The login to the container registry is not handled, the daemon needs to have already proper permissions to push the image to the destination.
+
 
 ## Notes
 

@@ -6,7 +6,7 @@ description: >
   Use templates to fine tune build specs
 ---
 
-Luet supports the [`helm` rendering engine template](https://helm.sh/docs/chart_template_guide/). It's being used to interpolate `build.yaml` and `finalize.yaml` files before their execution. The following document assumes you are familiar with the `helm` templating.
+Luet supports the [`sprig` rendering engine template, like helm](http://masterminds.github.io/sprig/). It's being used to interpolate `build.yaml` and `finalize.yaml` files before their execution. The following document assumes you are familiar with the `helm` templating.
 
 The `build.yaml` and `finalize.yaml` files are rendered during build time, and it's possible to use the `helm` templating syntax inside such files. The `definition.yaml` file will be used to interpolate templating values available in `build.yaml`
 
@@ -85,7 +85,7 @@ The `finalize.yaml` file has access only to the package fields during templating
 
 ## References
 
-- [Helm Template syntax guide](https://helm.sh/docs/chart_template_guide/)
+- [Sprig docs](http://masterminds.github.io/sprig/)
 - [Helm Templating functions](https://helm.sh/docs/chart_template_guide/function_list/)
 - [Helm Templating variable](https://helm.sh/docs/chart_template_guide/variables/)
 

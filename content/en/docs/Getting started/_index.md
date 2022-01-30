@@ -58,7 +58,7 @@ repositories:
   cached: true
   priority: 1
   urls:
-  - "https://get.mocaccino.org/mocaccino-repository-index"
+  - "https://raw.githubusercontent.com/mocaccinoOS/repository-index/gh-pages"
 EOF
 
 # Install the official luet repository to get always the latest luet version
@@ -114,14 +114,14 @@ system:
   database_engine: "boltdb"
   tmpdir_base: "/var/tmp/luet" # The temporary directory to be used
 repositories:
-- name: "mocaccino-desktop-stable" # Repository name
-  description: "MocaccinoOS desktop Repository (stable)"
+- name: "some-repository-name" # Repository name
+  description: "A beautiful description"
   type: "http" # Repository type, disk or http are supported (disk for local path)
   enable: true # Enable/Disable repo
   cached: true # Enable cache for repository
   priority: 3 # Cache priority
   urls: # Repository URLs
-    - "https://get.mocaccino.org/mocaccino-desktop-stable"
+    - "...."
 ```
 
 #### Configuration in `/etc/luet/repos.conf.d/`
@@ -129,14 +129,14 @@ repositories:
 A repository file can be for example:
 
 ```yaml
-name: "mocaccino-desktop-stable" # Repository name
-description: "MocaccinoOS desktop Repository (stable)"
+name: "..." # Repository name
+description: "..."
 type: "http" # Repository type, disk or http are supported (disk for local path)
 enable: true # Enable/Disable repo
 cached: true # Enable cache for repository
 priority: 3 # Cache priority
 urls: # Repository URLs
-  - "https://get.mocaccino.org/mocaccino-desktop-stable"
+  - "..."
 ```
 
 

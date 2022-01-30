@@ -143,3 +143,5 @@ You can use tools like [yq](https://github.com/mikefarah/yq) to inspect those:
 ```bash
 yq r build/gogs-dev-vcs-0.11.91.metadata.yaml checksums
 ```
+
+Now if you want to consume the artifacts just built with `luet install`, you can create a repository with `luet create-repo`.
